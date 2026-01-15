@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Publier une nouvelle recette - Les Restes{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <!-- Header avec retour -->
+    <div class="mb-4">
+        <a href="{{ path('app_profil') }}" class="btn btn-outline-success">
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Retour à mon profil
+        </a>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="text-success mb-4">Publier une nouvelle recette</h1>
+            
+            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'id': 'recette-form', 'novalidate': 'novalidate'}}) }}
+            
+            <!-- Titre -->
+            <div class="mb-3">
+                {{ form_label(form.nom, 'Titre', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                <span class="text-danger" aria-hidden="true">*</span>
+                {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Omelette anti-gaspi', 'aria-required': 'true'}}) }}
+                {{ form_errors(form.nom) }}
+            </div>
+            
+            <!-- Description -->
+            <div class="mb-3">
+                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                <span class="text-danger" aria-hidden="true">*</span>
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 4, 'placeholder': 'Une recette pour utiliser vos restes de légumes...', 'aria-required': 'true'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+            
+            <!-- Upload image -->
+            <div class="mb-4">
+                <label for="recette_imageFile_file" class="form-label fw-bold">Image de la recette</label>
+                {{ form_widget(form.imageFile, {'attr': {'class': 'form-control', 'accept': 'image/*'}}) }}
+                {{ form_errors(form.imageFile) }}
+                <small class="form-text text-muted d-block mt-2">
+                    Formats acceptés : JPG, PNG, GIF. Taille max : 5MB
+                </small>
+            </div>
+            
+            <!-- Temps et personnes -->
+            <div class="row mb-3">
+                <div class="col-12 col-md-6 mb-3 mb-md-0">
+                    {{ form_label(form.tempsCuisson, 'Temps de preparation (min.)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    <div class="input-group">
+                        {{ form_widget(form.tempsCuisson, {'attr': {'class': 'form-control', 'placeholder': '15'}}) }}
+                        <span class="input-group-text">minutes</span>
+                    </div>
+                    {{ form_errors(form.tempsCuisson) }}
+                </div>
+                <div class="col-12 col-md-6">
+                    {{ form_label(form.nombrePersonnes, 'Nombre de personnes', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(form.nombrePersonnes, {'attr': {'class': 'form-control', 'placeholder': '4'}}) }}
+                    {{ form_errors(form.nombrePersonnes) }}
+                </div>
+            </div>
+            
+            <!-- Difficulté -->
+            <fieldset class="mb-4">
+                <legend class="form-label fw-bold mb-2">Difficulté</legend>
+                <div class="d-flex gap-4">
+                    <div class="form-check form-check-inline mb-0">
+                        <input class="form-check-input" type="radio" name="recette[difficulte]" id="difficulte_1" value="1" checked>
+                        <label class="form-check-label" for="difficulte_1">Facile</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-0">
+                        <input class="form-check-input" type="radio" name="recette[difficulte]" id="difficulte_2" value="2">
+                        <label class="form-check-label" for="difficulte_2">Moyen</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-0">
+                        <input class="form-check-input" type="radio" name="recette[difficulte]" id="difficulte_3" value="3">
+                        <label class="form-check-label" for="difficulte_3">Difficile</label>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <hr class="my-4">
+            
+            <!-- Ingrédients -->
+            <h2 class="h5 text-success mb-3">Ingrédients</h2>
+            <div id="ingredients-collection" class="mb-3">
+                {% for recetteIngredient in form.recetteIngredients %}
+                    <div class="ingredient-row mb-2">
+                        <div class="row g-2">
+                            <div class="col-md-5">
+                                <div class="ingredient-autocomplete-wrapper">
+                                    {{ form_widget(recetteIngredient.ingredient_id, {'attr': {'class': 'd-none'}}) }}
+                                    {{ form_widget(recetteIngredient.ingredient_nom, {'attr': {'class': 'form-control ingredient-autocomplete', 'placeholder': 'Nom de l\'ingrédient', 'autocomplete': 'off'}}) }}
+                                    <div class="autocomplete-results" style="display: none;"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                {{ form_widget(recetteIngredient.quantite, {'attr': {'class': 'form-control', 'placeholder': 'Qté'}}) }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form_widget(recetteIngredient.unite, {'attr': {'class': 'form-select'}}) }}
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" 
+                                        class="btn btn-outline-danger w-100 remove-ingredient"
+                                        aria-label="Supprimer cet ingrédient">
+                                    <i class="bi bi-x-lg" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="button" class="btn btn-outline-success btn-sm mb-4" id="add-ingredient">
+                <i class="bi bi-plus-lg" aria-hidden="true"></i> Ajouter un ingrédient
+            </button>
+            
+            <hr class="my-4">
+            
+            <!-- Étapes de préparation DYNAMIQUES -->
+            <h2 class="h5 text-success mb-3">Étapes de préparation</h2>
+            <div id="etapes-collection" class="mb-3">
+                <!-- Les étapes seront ajoutées ici -->
+            </div>
+            
+            <button type="button" class="btn btn-outline-success btn-sm mb-4" id="add-etape">
+                <i class="bi bi-plus-lg" aria-hidden="true"></i> Ajouter une étape
+            </button>
+            
+            <!-- Champ caché pour les étapes -->
+            {{ form_widget(form.etapes, {'attr': {'id': 'etapes-hidden', 'class': 'd-none'}}) }}
+            
+            <!-- Catégorie -->
+            <div class="mb-4">
+                {{ form_label(form.categorie, 'Catégorie', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.categorie, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.categorie) }}
+            </div>
+            
+            <!-- Boutons d'action -->
+            <div class="d-flex justify-content-between mt-5">
+                <a href="{{ path('app_recette_index') }}" class="btn btn-outline-secondary">
+                    Annuler
+                </a>
+                <button type="submit" class="btn btn-success px-4">
+                    <i class="bi bi-check-circle" aria-hidden="true"></i> Publier la recette
+                </button>
+            </div>
+            <!-- Champs cachés  -->
+            <div class="d-none">
+                {{ form_row(form.difficulte) }}
+                {{ form_row(form.recetteIngredients) }}
+            </div>
+            
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+  <script src="/js/recipe-form.js?v=2"></script>
+{% endblock %}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Les Restes{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block meta %}{% endblock %}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="/css/app.css">
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <style>
+/* BARRE NAVIGATION MOBILE */
+.mobile-bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: #f8f9fa !important;
+    border-top: 2px solid #1E5128 !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    padding: 0.75rem 0 !important;
+    z-index: 9999 !important;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15) !important;
+    height: 70px !important;
+}
+
+.mobile-nav-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    color: #1E5128 !important;
+    text-decoration: none !important;
+    font-size: 0.7rem !important;
+    font-weight: 500 !important;
+    padding: 0.5rem !important;
+    min-width: 70px !important;
+    flex: 1 !important;
+}
+
+.mobile-nav-item i {
+    font-size: 2rem !important;
+    margin-bottom: 0.25rem !important;
+}
+
+@media (max-width: 767px) {
+    body {
+        padding-bottom: 85px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .mobile-bottom-nav {
+        display: none !important;
+    }
+}
+</style>
+    <body>
+        <!-- Navigation -->
+        {% include 'partials/_navbar.html.twig' %}
+        {% include 'partials/_bottom_nav_mobile.html.twig' %}
+
+        <!-- Messages Flash -->
+        {% include 'partials/_flash_messages.html.twig' %}
+
+        <!-- Contenu -->
+        {% block body %}{% endblock %}
+
+        {% include 'partials/_footer.html.twig' %}
+
+        <!-- MODALE CONNEXION - INSCRIPTION -->
+        {% include 'partials/_modals_auth.html.twig' %}
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/auth-modals.js"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

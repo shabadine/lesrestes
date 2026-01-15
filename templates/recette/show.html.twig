@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ recette.nom }} - Les Restes{% endblock %}
+
+{% block body %}
+{# Section image #}
+{% include 'recette/partials/_header_image.html.twig' with {
+    'recette': recette
+    } %}
+
+{# Section en-tete recette #}
+{% include 'recette/partials/_recipe_header.html.twig' with {
+    'recette': recette,
+    'isFavorite': isFavorite
+    } %}
+
+{# Section ingrédient + Préparation #}
+<div class="container">
+    <div class="row mb-5">
+        {% include 'recette/partials/_ingredient_list.html.twig' with {
+            'recette': recette
+            } %}
+
+        {% include 'recette/partials/_preparation_steps.html.twig' with {
+            'recette': recette
+            } %}
+    </div>
+</div>
+
+{# Section Commentaires #}
+{% include 'recette/partials/_comments_section.html.twig' with {
+    'recette': recette, 
+    'commentaireForm': commentaireForm
+    } %}
+
+
+{% block javascripts %}
+<script src="{{ asset('js/recipe-show.js') }}"></script>
+{% endblock %}
+{% endblock %}

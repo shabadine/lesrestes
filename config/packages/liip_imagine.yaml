@@ -1,0 +1,14 @@
+liip_imagine:
+    loaders:
+        default:
+            filesystem:
+                data_root: '%kernel.project_dir%/public'
+
+    filter_sets:
+        cache: ~
+        thumb_recette:
+            quality: 75            
+            filters:
+                thumbnail:
+                    size: [612, 312]
+                    mode: outbound   

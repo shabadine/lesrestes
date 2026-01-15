@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les recettes - Les Restes{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="mb-4">Toutes les recettes</h1>
+    
+    {{ include('recette/partials/_search_form.html.twig') }}
+    
+    <!-- En tete Résultats -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>{{ recettes.getTotalItemCount() }} recette(s) trouvée(s)</h2>
+        {% if app.user %}
+            <a href="{{ path('app_recette_new') }}" class="btn btn-success">
+                <i class="bi bi-plus" aria-hidden="true"></i> Publier une recette
+            </a>
+        {% endif %}
+    </div>
+    
+    {# Liste des recettes #}
+    {% if recettes|length > 0 %}
+      <div class="row">
+       {% for recette in recettes %}
+      <div class="col-12 col-sm-6 col-lg-4 mb-4">
+        {{ include('recette/partials/_recipe_card.html.twig') }}
+      </div>
+       {% endfor %}
+      </div>
+   
+    {# Stats de pagination #}
+      {% include 'recette/partials/_pagination_stats.html.twig' with {
+        'recettes': recettes
+        } %} 
+   {% else %}
+       {% include 'recette/partials/_no_results.html.twig' with {
+        'recettes': recettes
+        } %}
+    {% endif %}
+ </div>
+{% endblock %}

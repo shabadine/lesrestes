@@ -1,0 +1,21 @@
+{# Image en haut de page #}
+<div class="container mt-4">
+    {% if recette.image %}
+        <div class="rounded overflow-hidden shadow-sm">
+            <img src="{{ asset('uploads/recettes/' ~ recette.image) | imagine_filter('thumb_recette') }}" 
+                 class="img-fluid w-100" 
+                 width="1200" height="400"
+                 style="max-height: 400px; object-fit: cover;" 
+                 alt="Illustration de la recette : {{ recette.nom }}">
+        </div>
+    {% else %}
+        
+        <div class="bg-light border d-flex align-items-center justify-content-center rounded" 
+             style="height: 300px;"
+             role="img"
+             aria-label="Aucune image disponible pour cette recette">
+            
+            <i class="bi bi-image text-secondary" aria-hidden="true" style="font-size: 5rem;"></i>
+        </div>
+    {% endif %}
+</div>

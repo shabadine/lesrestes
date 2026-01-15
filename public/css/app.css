@@ -1,0 +1,22 @@
+/*
+LES RESTES - Fichier principal CSS
+Imports de tous les modules
+*/
+
+/* Base et variables */
+@import url("base.css");
+
+/* Composants */
+@import url("navbar.css");
+@import url("footer.css");
+@import url("cards.css");
+@import url("modals.css");
+@import url("forms.css");
+@import url("pagination.css");
+@import url("recipe-form.css");
+
+/* Responsive */
+@import url("responsive.css");
+
+/* Utilitaires */
+@import url("utilities.css");

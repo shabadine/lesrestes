@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Publier une nouvelle recette - Les Restes{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <div class="mb-4">
+        <a href="{{ path('app_profil') }}" class="btn btn-outline-success">
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Retour à mon profil
+        </a>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="text-success mb-4">Publier une nouvelle recette</h1>
+            
+            {{ include('recette/_form.html.twig', {'button_label': 'Publier la recette'}) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/js/recipe-form.js"></script>
+{% endblock %}
