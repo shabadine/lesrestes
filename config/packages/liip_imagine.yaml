@@ -1,4 +1,7 @@
 liip_imagine:
+    twig:
+        mode: lazy
+
     loaders:
         default:
             filesystem:
@@ -11,4 +14,4 @@ liip_imagine:
             filters:
                 thumbnail:
                     size: [612, 312]
-                    mode: outbound   
+                    mode: outbound

@@ -24,15 +24,14 @@ class ContactType extends AbstractType
                     'placeholder' => 'Votre nom et prenom'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre nom'
-                    ]),
-                    new Length([
-                        'min' => 2,
-                        'max' => 100,
-                        'minMessage' => 'Le nom doit contenir au moins {{ limit }} caracteres',
-                        'maxMessage' => 'Le nom ne peut pas depasser {{ limit }} caracteres'
-                    ])
+                    // Correction ici : message au lieu de ['message' => ...]
+                    new NotBlank(message: 'Veuillez entrer votre nom'),
+                    new Length(
+                        min: 2,
+                        max: 100,
+                        minMessage: 'Le nom doit contenir au moins {{ limit }} caracteres',
+                        maxMessage: 'Le nom ne peut pas depasser {{ limit }} caracteres'
+                    )
                 ]
             ])
             ->add('email', EmailType::class, [
@@ -42,12 +41,8 @@ class ContactType extends AbstractType
                     'placeholder' => 'votre.email@exemple.com'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre email'
-                    ]),
-                    new Email([
-                        'message' => 'Veuillez entrer un email valide'
-                    ])
+                    new NotBlank(message: 'Veuillez entrer votre email'),
+                    new Email(message: 'Veuillez entrer un email valide')
                 ]
             ])
             ->add('sujet', TextType::class, [
@@ -57,15 +52,13 @@ class ContactType extends AbstractType
                     'placeholder' => 'Objet de votre message'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un sujet'
-                    ]),
-                    new Length([
-                        'min' => 5,
-                        'max' => 150,
-                        'minMessage' => 'Le sujet doit contenir au moins {{ limit }} caracteres',
-                        'maxMessage' => 'Le sujet ne peut pas depasser {{ limit }} caracteres'
-                    ])
+                    new NotBlank(message: 'Veuillez entrer un sujet'),
+                    new Length(
+                        min: 5,
+                        max: 150,
+                        minMessage: 'Le sujet doit contenir au moins {{ limit }} caracteres',
+                        maxMessage: 'Le sujet ne peut pas depasser {{ limit }} caracteres'
+                    )
                 ]
             ])
             ->add('message', TextareaType::class, [
@@ -76,15 +69,13 @@ class ContactType extends AbstractType
                     'placeholder' => 'Ecrivez votre message ici...'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un message'
-                    ]),
-                    new Length([
-                        'min' => 20,
-                        'max' => 2000,
-                        'minMessage' => 'Le message doit contenir au moins {{ limit }} caracteres',
-                        'maxMessage' => 'Le message ne peut pas depasser {{ limit }} caracteres'
-                    ])
+                    new NotBlank(message: 'Veuillez entrer un message'),
+                    new Length(
+                        min: 20,
+                        max: 2000,
+                        minMessage: 'Le message doit contenir au moins {{ limit }} caracteres',
+                        maxMessage: 'Le message ne peut pas depasser {{ limit }} caracteres'
+                    )
                 ]
             ])
         ;
@@ -92,8 +83,6 @@ class ContactType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            
-        ]);
+        $resolver->setDefaults([]);
     }
 }

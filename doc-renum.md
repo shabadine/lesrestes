@@ -1145,7 +1145,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 class Recette
 {
- // ... propriétés existantes
 
  #[Vich\UploadableField(mapping: 'recette_images', fileNameProperty: 'image')]
  private ?File $imageFile = null;

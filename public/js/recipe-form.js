@@ -204,8 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         etapeIndex = etapes.length + 1;
     }
-
-    // Mettre à jour le champ caché
      // Mettre à jour le champ caché
 function updateEtapesHidden() {
     if (!etapesContainer || !etapesHidden) return;
