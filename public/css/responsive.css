@@ -107,7 +107,7 @@ Breakpoints Bootstrap: xs<576, sm>=576, md>=768, lg>=992, xl>=1200, xxl>=1400
 }
 
 /* ============================================
-   DETAIL RECETTE
+    DETAIL RECETTE
 ============================================ */
 @media (max-width: 992px) {
     .recipe-detail-image {
@@ -125,6 +125,27 @@ Breakpoints Bootstrap: xs<576, sm>=576, md>=768, lg>=992, xl>=1200, xxl>=1400
     }
 }
 
+
+@media (max-width: 576px) {
+    .recipe-header-actions {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+    }
+
+    .recipe-header-actions .btn {
+        flex: 1; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.6rem 0.2rem !important;
+        font-size: 0.85rem; 
+    }
+
+    .recipe-header-actions .btn-text {
+        margin-left: 4px;
+    }
+}
 /* ============================================
    PROFIL UTILISATEUR
 ============================================ */
@@ -454,4 +475,9 @@ Breakpoints Bootstrap: xs<576, sm>=576, md>=768, lg>=992, xl>=1200, xxl>=1400
     .mobile-bottom-nav {
         display: none !important;
     }
+}
+
+.recipe-title {
+    font-size: 1.5rem !important;
+    line-height: 1.2;
 }

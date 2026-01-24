@@ -2,23 +2,24 @@
 Variable requise: recette, isFavorite #}
 <div class="container my-4">
     <!-- Boutons retour et favoris -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <a href="{{ path('app_recette_index') }}" class="btn btn-outline-success">
-            <i class="bi bi-arrow-left" aria-hidden="true"></i> Retour aux recettes
-        </a>
-        
-        {% if app.user %}
-            <button type="button" 
-                    class="btn btn-warning" 
-                    id="favoriBtn"
-                    data-recette-id="{{ recette.id }}"
-                    data-is-favorite="{{ isFavorite ? 'true' : 'false' }}"
-                    aria-label="{{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">
-                <i class="bi bi-heart{{ isFavorite ? '-fill' : '' }}" id="favoriIcon" aria-hidden="true"></i>
-                <span id="favoriText">{{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux Favoris' }}</span>
-            </button>
-        {% endif %}
-    </div>
+    <div class="recipe-header-actions d-flex justify-content-between align-items-center mb-4 gap-2">
+    <a href="{{ path('app_recette_index') }}" class="btn btn-outline-success">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i> 
+        <span class="btn-text">Retour</span>
+    </a>
+    
+    {% if app.user %}
+        <button type="button" 
+                class="btn btn-warning" 
+                id="favoriBtn"
+                data-recette-id="{{ recette.id }}"
+                data-is-favorite="{{ isFavorite ? 'true' : 'false' }}"
+                aria-label="{{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">
+            <i class="bi bi-heart{{ isFavorite ? '-fill' : '' }}" id="favoriIcon" aria-hidden="true"></i>
+            <span id="favoriText" class="btn-text">{{ isFavorite ? 'Retirer' : 'Favoris' }}</span>
+        </button>
+    {% endif %}
+</div>
 
     <!-- Titre -->
     <h1 class="text-success mb-3">{{ recette.nom }}</h1>
