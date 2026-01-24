@@ -75,42 +75,64 @@ input[type="file"] {
 input[type="file"]::-webkit-file-upload-button {
     cursor: pointer;
 }
-/* ===== STYLE RECHERCHE AVANCÉE ===== */
+/* ===== RECHERCHE AVANCÉE  ===== */
 .search-bar-container {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+    background: linear-gradient(145deg, #ffffff 0%, #f9fbfb 100%);
+    border: 1px solid rgba(0,0,0,.04);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,.06);
+    transition: box-shadow .3s ease;
+}
+.search-bar-container:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,.08);
 }
 
-/* Style des labels pour que ce soit plus "UI Design" */
 .search-bar-container .form-label {
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .5px;
     text-transform: uppercase;
     color: #6c757d;
-    margin-bottom: 0.5rem;
+    margin-bottom: .5rem;
 }
 
-/* Customisation des inputs */
 .search-bar-container .form-control,
 .search-bar-container .form-select {
-    border: 2px solid #f0f0f0 !important;
-    border-radius: 8px !important;
-    padding: 0.6rem 0.8rem;
-    transition: all 0.2s ease-in-out;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: .65rem 1rem;
+    background: #fff;
+    transition: all .25s ease;
 }
-
 .search-bar-container .form-control:focus,
 .search-bar-container .form-select:focus {
-    border-color: #198754 !important; 
-    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.1) !important;
-    background-color: #fff;
+    border-color: #198754;
+    box-shadow: 0 0 0 .2rem rgba(25,135,84,.15);
+    transform: translateY(-1px);
 }
 
-/* Animation de survol des boutons */
+.search-bar-container .btn-success {
+    background: linear-gradient(135deg, #198754 0%, #21c45d 100%);
+    border: none;
+    border-radius: 12px;
+    padding: .65rem 1.75rem;
+    font-weight: 600;
+    letter-spacing: .5px;
+    transition: all .3s ease;
+}
 .search-bar-container .btn-success:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(25, 135, 84, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(33,196,93,.35);
+}
+
+.search-bar-container .btn-light {
+    border-radius: 12px;
+    padding: .65rem 1.25rem;
+    font-weight: 500;
+    transition: all .2s ease;
+}
+.search-bar-container .btn-light:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
 }

@@ -14,49 +14,49 @@
     </div>
 
     <div class="collapse" id="searchCollapse">
-        <div class="search-bar-container">
-    {{ form_start(searchForm, {
-        method: 'GET',
-        attr: {
-            class: 'row g-3 align-items-end',
-            novalidate: 'novalidate'
-        }
-    }) }}
-
-        <div class="col-md-4">
-            {{ form_row(searchForm.query, {
-                label: 'Recherche par mot-clé',
-                attr: { placeholder: 'Ex: Tarte, Pomme…', class: 'form-control form-control-lg' }
+                <div class="search-bar-container">
+            {{ form_start(searchForm, {
+                method: 'GET',
+                attr: {
+                    class: 'row g-3 align-items-end',
+                    novalidate: 'novalidate'
+                }
             }) }}
-        </div>
 
-        <div class="col-md-2">
-            {{ form_row(searchForm.categorie, { label: 'Catégorie', attr: { class: 'form-select' } }) }}
-        </div>
+                <div class="col-md-4">
+                    {{ form_row(searchForm.query, {
+                        label: 'Recherche par mot-clé',
+                        attr: { placeholder: 'Ex: Tarte, Pomme…', class: 'form-control form-control-lg' }
+                    }) }}
+                </div>
 
-        <div class="col-md-2">
-            {{ form_row(searchForm.difficulte, { label: 'Difficulté', attr: { class: 'form-select' } }) }}
-        </div>
+                <div class="col-md-2">
+                    {{ form_row(searchForm.categorie, { label: 'Catégorie', attr: { class: 'form-select' } }) }}
+                </div>
 
-        <div class="col-md-2">
-            {{ form_row(searchForm.tempsMax, { label: 'Temps max (min)', attr: { class: 'form-control' } }) }}
-        </div>
+                <div class="col-md-2">
+                    {{ form_row(searchForm.difficulte, { label: 'Difficulté', attr: { class: 'form-select' } }) }}
+                </div>
 
-        <div class="col-md-2">
-            {{ form_row(searchForm.tri, { label: 'Trier par', attr: { class: 'form-select' } }) }}
-        </div>
+                <div class="col-md-2">
+                    {{ form_row(searchForm.tempsMax, { label: 'Temps max (min)', attr: { class: 'form-control' } }) }}
+                </div>
 
-        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
-            <a href="{{ path('app_recette_index') }}" class="btn btn-light border">
-                <i class="bi bi-arrow-clockwise"></i> Réinitialiser
-            </a>
-            <button type="submit" class="btn btn-success px-4">
-                <i class="bi bi-search"></i> Appliquer les filtres
-            </button>
-        </div>
+                <div class="col-md-2">
+                    {{ form_row(searchForm.tri, { label: 'Trier par', attr: { class: 'form-select' } }) }}
+                </div>
 
-    {{ form_end(searchForm) }}
-</div>
+                <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                    <a href="{{ path('app_recette_index') }}" class="btn btn-light border">
+                        <i class="bi bi-arrow-clockwise"></i> Réinitialiser
+                    </a>
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="bi bi-search"></i> Appliquer les filtres
+                    </button>
+                </div>
+
+            {{ form_end(searchForm) }}
+        </div>
     </div>
 </div>
 
