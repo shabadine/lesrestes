@@ -75,46 +75,42 @@ input[type="file"] {
 input[type="file"]::-webkit-file-upload-button {
     cursor: pointer;
 }
-/* ===== BARRE DE RECHERCHE AVANCÉE ===== */
-form.search-bar {
-    background-color: #f8f9fa;
-    border-radius: 0.75rem;
+/* ===== STYLE RECHERCHE AVANCÉE ===== */
+.search-bar-container {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
 }
 
-form.search-bar .form-label {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #495057;
+/* Style des labels pour que ce soit plus "UI Design" */
+.search-bar-container .form-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #6c757d;
     margin-bottom: 0.5rem;
-    display: block;
 }
 
-form.search-bar input.form-control,
-form.search-bar select.form-select {
-    border-radius: 0.5rem !important;
-    border: 1px solid #ced4da !important;
-    padding: 0.6rem 0.75rem !important;
-    font-size: 0.95rem !important;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* Customisation des inputs */
+.search-bar-container .form-control,
+.search-bar-container .form-select {
+    border: 2px solid #f0f0f0 !important;
+    border-radius: 8px !important;
+    padding: 0.6rem 0.8rem;
+    transition: all 0.2s ease-in-out;
 }
 
-form.search-bar input.form-control:focus,
-form.search-bar select.form-select:focus {
-    border-color: #4caf50 !important;
-    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25) !important;
+.search-bar-container .form-control:focus,
+.search-bar-container .form-select:focus {
+    border-color: #198754 !important; 
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.1) !important;
+    background-color: #fff;
 }
 
-/* Espace entre les champs */
-form.search-bar .col-md-2,
-form.search-bar .col-md-4 {
-    margin-bottom: 1rem;
-}
-
-/* Boutons alignés à droite */
-form.search-bar .col-12.d-flex {
-    justify-content: flex-end !important;
-    gap: 0.75rem !important;
-    margin-top: 0.5rem !important;
+/* Animation de survol des boutons */
+.search-bar-container .btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(25, 135, 84, 0.2);
 }

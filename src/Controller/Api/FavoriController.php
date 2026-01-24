@@ -8,7 +8,6 @@ use App\Repository\RecetteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -17,31 +16,25 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class FavoriController extends AbstractController
 {
     #[Route('/toggle/{id}', name: 'api_favori_toggle', methods: ['POST'])]
-    public function toggle(int $id, RecetteRepository $recetteRepository, FavoriRepository $favoriRepository, EntityManagerInterface $em): JsonResponse
-    {   
-        \dump([
-    'method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown',
-    'user' => $this->getUser()?->getUserIdentifier(),
-    'recetteId' => $id,
-    'headers' => getallheaders()
-]);
+    public function toggle(
+        int $id,
+        RecetteRepository $recetteRepository,
+        FavoriRepository $favoriRepository,
+        EntityManagerInterface $em
+    ): JsonResponse {
         $recette = $recetteRepository->find($id);
         if (!$recette) {
             return new JsonResponse(['error' => 'Recette non trouvée'], 404);
         }
 
-        $user = $this->getUser();
+        $user   = $this->getUser();
         $favori = $favoriRepository->findOneBy(['user' => $user, 'recette' => $recette]);
 
         if ($favori) {
-            // Retirer des favoris
             $em->remove($favori);
             $isFavorite = false;
         } else {
-            // Ajouter aux favoris
-            $favori = new Favori();
-            $favori->setUser($user)
-                   ->setRecette($recette);
+            $favori = (new Favori())->setUser($user)->setRecette($recette);
             $em->persist($favori);
             $isFavorite = true;
         }
@@ -49,9 +42,9 @@ class FavoriController extends AbstractController
         $em->flush();
 
         return new JsonResponse([
-            'success' => true,
+            'success'    => true,
             'isFavorite' => $isFavorite,
-            'message' => $isFavorite ? 'Ajouté aux favoris' : 'Retiré des favoris'
+            'message'    => $isFavorite ? 'Ajouté aux favoris' : 'Retiré des favoris',
         ]);
     }
 }
