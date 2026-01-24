@@ -15,3 +15,9 @@ liip_imagine:
                 thumbnail:
                     size: [612, 312]
                     mode: outbound
+        header_recette:
+            quality: 85
+            filters:
+                thumbnail:
+                    size: [1200, 400]
+                    mode: outbound
