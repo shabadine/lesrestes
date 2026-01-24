@@ -67,9 +67,11 @@ Variable requise: recette, isFavorite #}
     </div>
 
     <!-- Auteur et date -->
-    <p class="text-secondary small mb-4">
+    <p class="recipe-meta-data mb-4 small">
         Par {{ recette.user.prenom }} {{ recette.user.nom|first }}. - 
-        {{ recette.dateCreation|date('d M Y') }}
+        <time datetime="{{ recette.dateCreation|date('Y-m-d') }}">
+            {{ recette.dateCreation|date('d M Y') }}
+        </time>
     </p>
 </div>
 

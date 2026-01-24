@@ -192,3 +192,25 @@ footer .text-muted {
 .form-select-sm {
     min-height: 32px !important;
 }
+
+/* Surcharge globale pour l'accessibilité du texte secondaire */
+.text-secondary, 
+.text-muted,
+.search-bar-container .form-label {
+    color: #555e66 !important; 
+}
+
+
+small.text-secondary,
+.small.text-secondary {
+    color: #4b545c !important;
+}
+
+.recipe-meta-data {
+    color: #4b545c; 
+}
+
+
+.recipe-meta-data time {
+    font-weight: 500;
+}
