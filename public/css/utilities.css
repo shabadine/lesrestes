@@ -214,3 +214,8 @@ small.text-secondary,
 .recipe-meta-data time {
     font-weight: 500;
 }
+
+.btn-search-hero {
+    background-color: #e65100 !important;
+    border-color: #e65100 !important;
+}
