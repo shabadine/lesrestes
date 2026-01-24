@@ -22,10 +22,10 @@
                     <!-- Photo actuelle -->
                     <div class="text-center mb-4">
                         {% if user.photo %}
-                            <img src="/uploads/profils/{{ user.photo }}" 
-                                 alt="{{ user.prenom }}" 
-                                 class="rounded-circle"
-                                 style="width: 150px; height: 150px; object-fit: cover;">
+                            <img src="{{ ('uploads/profils/' ~ user.photo) | imagine_filter('profil_full') }}" 
+                                alt="Photo de profil" 
+                                class="rounded-circle mx-auto mb-3"
+                                style="width: 120px; height: 120px; object-fit: contain; background: #f8f9fa;">
                         {% else %}
                             <div class="rounded-circle bg-success d-flex align-items-center justify-content-center mx-auto" 
                                  style="width: 150px; height: 150px;">

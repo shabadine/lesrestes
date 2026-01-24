@@ -13,11 +13,10 @@
             <div class="card border-success h-100 shadow-sm">
                 <div class="card-body text-center p-4 d-flex flex-column justify-content-center">
                     {% if user.photo %}
-                        <img src="/uploads/profils/{{ user.photo }}" 
-                             alt="Photo de profil de {{ user.prenom }}" 
-                             class="rounded-circle mx-auto mb-3"
-                             width="120" height="120"
-                             style="width: 120px; height: 120px; object-fit: cover;">
+                      <img src="{{ ('uploads/profils/' ~ user.photo) | imagine_filter('profil_full') }}" 
+                            alt="Photo de profil" 
+                            class="rounded-circle mx-auto mb-3"
+                            style="width: 120px; height: 120px; object-fit: contain; background: #f8f9fa;">
                     {% else %}
                         <div class="rounded-circle bg-success d-flex align-items-center justify-content-center mx-auto mb-3" 
                              style="width: 120px; height: 120px;"
@@ -104,14 +103,14 @@
                         <article class="col-md-6 col-lg-4 mb-4">
                             <div class="card h-100 shadow-sm border-0">
                                 {% if recette.image %}
-                                    <img src="/uploads/recettes/{{ recette.image }}" 
+                                    <img src="{{ asset('uploads/recettes/' ~ recette.image) | imagine_filter('thumb_recette') }}"
                                          class="card-img-top" 
                                          alt="Image de {{ recette.nom }}"
                                          width="400" height="200"
-                                         style="height: 200px; object-fit: cover;">
+                                         style="height: 312px; object-fit: cover;">
                                 {% else %}
                                     <div class="bg-light d-flex align-items-center justify-content-center border-bottom" 
-                                         style="height: 200px;"
+                                         style="height: 312px;"
                                          role="img"
                                          aria-label="Image par défaut">
                                         <i class="bi bi-image text-secondary" aria-hidden="true" style="font-size: 3rem;"></i>
@@ -191,14 +190,14 @@
                         <article class="col-md-6 col-lg-4 mb-4">
                             <div class="card h-100 shadow-sm border-0">
                                 {% if recette.image %}
-                                    <img src="/uploads/recettes/{{ recette.image }}" 
+                                    <img src="{{ asset('uploads/recettes/' ~ recette.image) | imagine_filter('thumb_recette') }}"
                                          class="card-img-top" 
                                          alt="Image de {{ recette.nom }}"
                                          width="400" height="200"
-                                         style="height: 200px; object-fit: cover;">
+                                         style="height: 312px; object-fit: cover;">
                                 {% else %}
                                     <div class="bg-light d-flex align-items-center justify-content-center border-bottom" 
-                                         style="height: 200px;"
+                                         style="height: 312px;"
                                          role="img"
                                          aria-label="Image par défaut">
                                         <i class="bi bi-image text-secondary" aria-hidden="true" style="font-size: 3rem;"></i>
@@ -248,7 +247,7 @@
     </div>
 </div>
 
-{# Formulaires et Modals restent identiques mais avec contrastes corrigés #}
+{# Formulaires #}
 {% for recette in mesRecettes %}
 <form method="post" action="{{ path('app_recette_delete', {'id': recette.id}) }}" id="delete-form-{{ recette.id }}" style="display: none;">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recette.id) }}">
@@ -279,16 +278,16 @@
 
 
 <style>
-/* Onglet actif : Contraste élevé obligatoire */
+/* Onglet actif :  */
 .nav-tabs .nav-link.active {
     background-color: #198754 !important;
     color: #ffffff !important;
     border-color: #198754 !important;
 }
 
-/* Onglets inactifs : Correction du contraste pour Lighthouse */
+/* Onglets inactifs  */
 .nav-tabs .nav-link {
-    color: #145d3a !important; /* Vert beaucoup plus foncé pour passer le contraste */
+    color: #145d3a !important; 
     border: 1px solid transparent;
 }
 
