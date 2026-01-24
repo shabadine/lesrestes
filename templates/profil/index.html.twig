@@ -15,10 +15,10 @@
                     {% if user.photo %}
                       <img src="{{ ('uploads/profils/' ~ user.photo) | imagine_filter('profil_full') }}" 
                             alt="Photo de profil" 
-                            class="rounded-circle mx-auto mb-3"
+                            class="rounded-circle mx-auto mb-3 shadow-sm"
                             style="width: 120px; height: 120px; object-fit: contain; background: #f8f9fa;">
                     {% else %}
-                        <div class="rounded-circle bg-success d-flex align-items-center justify-content-center mx-auto mb-3" 
+                        <div class="rounded-circle bg-success d-flex align-items-center justify-content-center mx-auto mb-3 shadow-sm" 
                              style="width: 120px; height: 120px;"
                              role="img"
                              aria-label="Avatar par défaut">
