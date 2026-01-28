@@ -24,15 +24,22 @@
     <label for="recette_imageFile_file" class="form-label fw-bold">Image de la recette</label>
     
     {# Aperçu image existante (mode édition) #}
-    {% if recette is defined and recette.image %}
-        <div class="mb-2" id="current-image-preview">
-            <img src="/uploads/recettes/{{ recette.image }}" 
+   {% if recette is defined and recette.image %}
+    <div class="mb-3" id="current-image-preview">
+        <label class="form-label d-block text-muted small fw-bold uppercase">Image actuelle</label>
+        <div class="d-flex align-items-center gap-3 p-2 bg-light rounded border">
+            <img src="{{ asset('uploads/recettes/' ~ recette.image) | imagine_filter('form_preview') }}" 
                  alt="{{ recette.nom }}" 
-                 class="img-thumbnail" 
-                 style="max-height: 200px;">
-            <small class="d-block text-muted mt-1">Image actuelle</small>
+                 class="img-thumbnail shadow-sm">
+            
+            <div class="flex-grow-1">
+                <p class="mb-0 small text-muted">
+                    <i class="bi bi-info-circle"></i> Pour la remplacer, sélectionnez un nouveau fichier.
+                </p>
+            </div>
         </div>
-    {% endif %}
+    </div>
+{% endif %}
     
     <input type="file" 
            id="recette_imageFile_file" 

@@ -5,8 +5,8 @@
 **Auteur** : Bah shabadine
 **Formation** : Titre Professionnel Développeur Web et Web Mobile - Niveau 5
 **Centre de formation** : Dawan Toulouse
-**Date de début** : 30 juin 2025
-**Graduation prévue** : Avril 2026
+**Date de début** : Novembre 2025
+**Graduation prévue** : Mars2026
 **Status** : En développement actif
 
 ## Table des matières
@@ -57,7 +57,7 @@ Les Restes est une plateforme web anti-gaspillage alimentaire qui permet aux uti
 
 -   **Backend** : Symfony 7.3.\* (aligné avec `composer.json`)
 -   **PHP** : Version 8.3.6
--   **Base de données** : MySQL 8.0 (Docker)
+-   **Base de données** : MySQL 8.0
 -   **Frontend** : Bootstrap 5, JavaScript vanilla
 -   **Assets** : Webpack Encore
 -   **Gestionnaire de dépendances** : Composer 2.8.12
@@ -92,55 +92,45 @@ php bin/console about
 Symfony 7.3 installé avec succès
 ```
 
-### 1.3 Configuration de la base de données avec Docker
+### 1.3 Configuration de la base de données (Environnement Local)
 
-J'ai choisi Docker pour avoir un environnement MySQL reproductible.
+Pour ce projet, j'ai choisi d'utiliser un environnement de développement local basé sur **MySQL**.  
+Cette approche permet une gestion directe et performante de la base de données via des outils comme **Laragon** ou **XAMPP**, tout en restant parfaitement compatible avec l'ORM **Doctrine** de **Symfony**.
 
-**Fichier `docker-compose.yml` créé** :
+#### Configuration du fichier `.env`
 
-```yaml
-version: "3.8"
-
-services:
-    mysql:
-    image: mysql:8.0
-    container_name: lesrestes_mysql
-    environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: lesrestes
-    MYSQL_USER: lesrestes_user
-    MYSQL_PASSWORD: lesrestes_pass
-    ports:
-        - "3307:3306"
-    volumes:
-        - mysql_data:/var/lib/mysql
-
-volumes:
-    mysql_data:
-```
-
-**Configuration du fichier `.env`** :
-
-```env
-DATABASE_URL="mysql://lesrestes_user:lesrestes_pass@127.0.0.1:3307/lesrestes?serverVersion=8.0"
-```
-
-**Démarrage de la base de données** :
+Le lien entre l'application et le serveur de données est défini dans le fichier de configuration de l'environnement.
 
 ```bash
-# Lancement du conteneur Docker
-docker-compose up -d
-
-# Création de la base de données
-php bin/console doctrine:database:create
+# Connexion à la base de données MySQL locale (port 3306 par défaut)
+# Format : mysql://utilisateur:mot_de_passe@adresse_ip:port/nom_base_de_donnees
+DATABASE_URL="mysql://root:root@127.0.0.1:3306/lesrestes?serverVersion=8.0"
 ```
 
+**Initialisation de la base de données via le terminal :**
+
+L'utilisation des commandes Symfony CLI permet d'automatiser la création de la structure sans avoir à écrire de requêtes SQL manuelles.
+
+```bash
+# Création de la base de données définie dans le .env
+php bin/console doctrine:database:create
+
+# Vérification de la conformité du schéma
+php bin/console doctrine:schema:validate
+```
 ### 1.4 Initialisation Git
 
+Le projet est suivi avec l'outil de versionnage Git afin de garantir la traçabilité des modifications et de permettre un retour en arrière si nécessaire.
+
 ```bash
+# Initialisation du dépôt Git local
 git init
+
+# Premier commit de la structure initiale du projet Symfony
 git add .
-git commit -m "Initial Symfony 7.3 setup with Docker MySQL"
+git commit -m "Initial Symfony 7.3 setup with MySQL configuration"
+
+# Création d'une branche dédiée pour le développement des entités (Branche thématique)
 git checkout -b feature/entities
 ```
 
@@ -661,79 +651,80 @@ J'ai créé `templates/base.html.twig` avec une navigation Bootstrap complète :
 <!DOCTYPE html>
 <html lang="fr">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>{% block title %}Les Restes{% endblock %}</title>
- <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
- {% block stylesheets %}
- {{ encore_entry_link_tags('app') }}
- {% endblock %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Les Restes{% endblock %}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
 </head>
 <body>
- <!-- Navigation -->
- <nav class="navbar navbar-expand-lg navbar-light bg-light">
- <div class="container">
- <a class="navbar-brand" href="{{ path('app_home') }}">
-   Les Restes
- </a>
- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
- <span class="navbar-toggler-icon"></span>
- </button>
- <div class="collapse navbar-collapse" id="navbarNav">
- <ul class="navbar-nav me-auto">
- <li class="nav-item">
- <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
- </li>
- <li class="nav-item">
- <a class="nav-link" href="{{ path('app_recette_index') }}">Recettes</a>
- </li>
- <li class="nav-item">
- <a class="nav-link" href="{{ path('app_ingredient_index') }}">Ingrédients</a>
- </li>
- <li class="nav-item">
- <a class="nav-link" href="#">Contact</a>
- </li>
- </ul>
- <ul class="navbar-nav">
- {% if app.user %}
- <li class="nav-item">
- <a class="nav-link" href="{{ path('app_profil') }}">
- <i class="bi bi-person-circle"></i> Profil
- </a>
- </li>
- <li class="nav-item">
- <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
- </li>
- {% else %}
- <li class="nav-item">
- <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
- </li>
- <li class="nav-item">
- <a class="nav-link btn btn-success text-white" href="{{ path('app_register') }}">
- S'inscrire
- </a>
- </li>
- {% endif %}
- </ul>
- </div>
- </div>
- </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{ path('app_home') }}">
+                Les Restes
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_recette_index') }}">Recettes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_ingredient_index') }}">Ingrédients</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_profil') }}">
+                                <i class="bi bi-person-circle"></i> Profil
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-success text-white ms-lg-2" href="{{ path('app_register') }}">
+                                S'inscrire
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
- <!-- Contenu principal -->
- <div class="container my-4">
- {% block body %}{% endblock %}
- </div>
+    <main class="container my-4">
+        {% block body %}{% endblock %}
+    </main>
 
- <!-- Footer -->
- <footer class="bg-light py-4 mt-5">
- <div class="container text-center">
- <p class="mb-0">© 2025 Les Restes - Anti-gaspi culinaire</p>
- </div>
- </footer>
+    <footer class="bg-light py-4 mt-auto">
+        <div class="container text-center">
+            <p class="text-muted mb-0">© 2025 Les Restes - Anti-gaspi culinaire</p>
+        </div>
+    </footer>
 
- {% block javascripts %}
- {{ encore_entry_script_tags('app') }}
- {% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
 </body>
 </html>
 ```
@@ -741,71 +732,77 @@ J'ai créé `templates/base.html.twig` avec une navigation Bootstrap complète :
 ### 6.6 Page d'accueil avec Hero et recherche
 
 J'ai créé `templates/home/index.html.twig` selon les wireframes :
-
 ```twig
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil - Les Restes{% endblock %}
 
 {% block body %}
-<!-- Hero Section -->
-<div class="hero-section text-center py-5 mb-5">
- <h1 class="display-4 mb-4">
- Transformez vos restes en délicieuses recettes
- </h1>
+    <section class="hero-section text-center py-5 mb-5">
+        <h1 class="display-4 mb-4">
+            Transformez vos restes en délicieuses recettes
+        </h1>
 
- <!-- Barre de recherche -->
- <div class="row justify-content-center">
- <div class="col-md-8">
- <form action="{{ path('app_search') }}" method="GET">
- <div class="input-group input-group-lg mb-4">
- <input type="text" class="form-control" name="q"
- placeholder="Entrez vos ingrédients (ex: tomates, œufs, fromage...)">
- <button class="btn btn-success" type="submit">
- <i class="bi bi-search"></i> Trouver des recettes
- </button>
- </div>
- </form>
- </div>
- </div>
-</div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form action="{{ path('app_search') }}" method="GET">
+                    <div class="input-group input-group-lg mb-4">
+                        <input type="text" class="form-control" name="q" 
+                               placeholder="Entrez vos ingrédients (ex: tomates, œufs, fromage...)">
+                        <button class="btn btn-success" type="submit">
+                            <i class="bi bi-search"></i> Trouver des recettes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
 
-<!-- Section Dernières recettes -->
-<div class="row">
- <div class="col-12">
- <h3 class="mb-4">Dernières recettes ajoutées</h3>
- </div>
-</div>
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">Dernières recettes ajoutées</h3>
+        </div>
+    </div>
 
-<div class="row">
- {% for recette in dernieresRecettes %}
- <div class="col-md-4 mb-4">
- <div class="card h-100">
- {% if recette.image %}
- <img src="/uploads/recettes/{{ recette.image }}"
- class="card-img-top"
- style="height: 200px; object-fit: cover;"
- alt="{{ recette.nom }}">
- {% else %}
- <img src="https://source.unsplash.com/300x200/?food"
- class="card-img-top"
- style="height: 200px; object-fit: cover;"
- alt="{{ recette.nom }}">
- {% endif %}
- <div class="card-body">
- <h5 class="card-title">{{ recette.nom }}</h5>
- <p class="card-text text-muted small">
- {{ recette.description|slice(0, 50) }}...
- </p>
- <a href="{{ path('app_recette_show', {'id': recette.id}) }}"
- class="btn btn-outline-success btn-sm">
- <i class="bi bi-eye"></i> Voir
- </a>
- </div>
- </div>
- </div>
- {% endfor %}
-</div>
+    <div class="row">
+        {% for recette in dernieresRecettes %}
+            <div class="col-md-4 mb-4">
+                <article class="card h-100 shadow-sm">
+                    {# Gestion de l'image de la recette avec fallback #}
+                    {% if recette.image %}
+                        <img src="{{ asset('uploads/recettes/' ~ recette.image) }}" 
+                             class="card-img-top" 
+                             style="height: 200px; object-fit: cover;" 
+                             alt="{{ recette.nom }}">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=300&h=200&fit=crop" 
+                             class="card-img-top" 
+                             style="height: 200px; object-fit: cover;" 
+                             alt="Image par défaut">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title text-capitalize">{{ recette.nom }}</h5>
+                        <p class="card-text text-muted small">
+                            {{ recette.description|slice(0, 80) }}...
+                        </p>
+                    </div>
+                    
+                    <div class="card-footer bg-transparent border-top-0 pb-3">
+                        <a href="{{ path('app_recette_show', {'id': recette.id}) }}" 
+                           class="btn btn-outline-success btn-sm w-100">
+                            <i class="bi bi-eye"></i> Voir la recette
+                        </a>
+                    </div>
+                </article>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <p class="text-center text-muted">Aucune recette n'a été publiée pour le moment.</p>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
 ```
 
@@ -1028,9 +1025,9 @@ class FavoriController extends AbstractController
 ```twig
 {% if app.user %}
  <button id="favoriBtn"
- class="btn btn-outline-danger"
- data-recette-id="{{ recette.id }}"
- data-is-favorite="{{ isFavorite ? 'true' : 'false' }}">
+        class="btn btn-outline-danger"
+        data-recette-id="{{ recette.id }}"
+        data-is-favorite="{{ isFavorite ? 'true' : 'false' }}">
  <i class="bi bi-heart{{ isFavorite ? '-fill' : '' }}"></i>
  <span>{{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}</span>
  </button>
@@ -1261,21 +1258,11 @@ J'ai créé une miniature compacte de 80px × 120px avec feedback visuel pour re
 
  <!-- Prévisualisation compacte (80px) -->
  {% if recette.image %}
- <div class="d-flex align-items-center gap-3 p-3 mb-2 bg-light rounded border">
- <img src="/uploads/recettes/{{ recette.image }}"
- class="rounded shadow-sm"
- style="max-height: 80px; max-width: 120px; object-fit: cover;"
- alt="{{ recette.nom }}">
- <div class="flex-grow-1">
- <p class="mb-0 small text-success fw-bold">
- <i class="bi bi-check-circle-fill"></i> Image actuelle
- </p>
- <p class="mb-0 small text-muted">
- Pour la remplacer, sélectionnez une nouvelle image ci-dessous
- </p>
- </div>
- </div>
- {% endif %}
+    <img src="{{ asset('uploads/recettes/' ~ recette.image) | imagine_filter('thumb_200') }}" 
+         alt="{{ recette.nom }}">
+{% else %}
+    <img src="{{ asset('images/placeholder.jpg') }}" alt="Image par défaut">
+{% endif %}
 
  <!-- Champ d'upload -->
  <div class="border rounded p-3 bg-white">
@@ -1397,20 +1384,17 @@ J'ai corrigé tous les templates pour utiliser des chemins cohérents et uniform
 
 ```twig
 <img src="{{ recette.image ?: 'https://unsplash.com/...' }}">
-<img src="uploads/recettes/{{ recette.image }}"> {# Manque le / #}
+<img src="uploads/recettes/{{ recette.image }}"> 
 ```
 
 **Après** (uniforme) :
 
 ```twig
 {% if recette.image %}
- <img src="/uploads/recettes/{{ recette.image }}"
- style="height: 200px; object-fit: cover;"
- alt="{{ recette.nom }}">
+    <img src="{{ asset('uploads/recettes/' ~ recette.image) | imagine_filter('thumb_200') }}" 
+         alt="{{ recette.nom }}">
 {% else %}
- <img src="https://source.unsplash.com/300x200/?food"
- style="height: 200px; object-fit: cover;"
- alt="{{ recette.nom }}">
+    <img src="{{ asset('images/placeholder.jpg') }}" alt="Image par défaut">
 {% endif %}
 ```
 
@@ -1477,7 +1461,20 @@ git merge feature/upload-images
 git branch -d feature/upload-images
 git checkout -b feature/commentaires
 ```
+### 8.12 Optimisation des images avec LiipImagineBundle
 
+Pour garantir des performances optimales (Score Lighthouse élevé) et un affichage homogène, j'ai implémenté **LiipImagineBundle**. Cet outil permet de générer des miniatures (*thumbnails*) à la volée pour éviter de charger des images originales trop lourdes.
+
+**Configuration des filtres (`config/packages/liip_imagine.yaml`) :**
+Plusieurs filtres ont été définis selon le contexte d'affichage :
+* **`thumb_recette`** : Redimensionnement 400x300 avec recadrage (*outbound*) pour les listes.
+* **`form_preview`** : Miniature 120x80 utilisée dans le formulaire pour un retour visuel compact.
+* **`large_banner`** : Format optimisé pour la page de détail.
+
+**Utilisation Twig :**
+```twig
+<img src="{{ asset('uploads/recettes/' ~ recette.image) | imagine_filter('thumb_recette') }}" 
+     alt="{{ recette.nom }}">
 ---
 
 ## ÉTAPE 9 : Système de commentaires
@@ -11370,6 +11367,7 @@ Les pages `/login` et `/register` utilisent le même système :
 
 ### 24.22 Refonte formulaire edit recette
 
+
 **Objectif** : Rendre le formulaire edit cohérent avec new
 
 **Fichiers modifiés** :
@@ -11403,7 +11401,27 @@ Les pages `/login` et `/register` utilisent le même système :
 -   Chargement étapes existantes en mode édition
 
 **Principe DRY respecté** : Un seul template `_form.html.twig` pour les deux pages.
+### 24.22.1 Focus Technique : Logique du script `recipe-form.js`
 
+Le fichier `recipe-form.js` est la pièce maîtresse de l'interactivité du formulaire. Il permet de gérer des données complexes (collections et listes dynamiques) sans recharger la page, tout en garantissant une structure de données valide pour Symfony.
+
+#### 1. Gestion des Ingrédients (Symfony CollectionType)
+* **Mécanisme du Prototype** : Le script utilise l'attribut `data-prototype` généré par Symfony. Ce morceau de HTML contient des placeholders (ex: `__name__`).
+* **Injection Dynamique** : Au clic sur "Ajouter un ingrédient", le JS calcule un index unique, remplace `__name__` par cet index dans le prototype, et injecte le nouveau bloc de champs dans le DOM. Cela permet à Symfony de mapper correctement chaque ligne d'ingrédient lors de la soumission.
+
+
+
+#### 2. Gestion des Étapes (Persistance JSON)
+* **Stockage masqué** : Pour éviter de créer une entité "Etape" trop lourde, les étapes sont gérées côté client comme une liste dynamique, puis sérialisées au format **JSON** dans un champ `textarea` masqué (`#etapes-hidden`).
+* **Synchronisation en temps réel** : Chaque ajout, modification de texte ou suppression d'étape déclenche une fonction de mise à jour. Celle-ci parcourt tous les champs d'étapes visibles, reconstruit un tableau d'objets et l'encode en JSON.
+* **Réordonnancement** : La fonction `renumberEtapes()` est appelée à chaque changement pour mettre à jour la numérotation visuelle (Étape 1, Étape 2, etc.) afin d'éviter les sauts de chiffres après une suppression.
+
+#### 3. Accessibilité Dynamique (ARIA)
+* **Labels contextuels** : Le script ne se contente pas de cloner du HTML. Il génère dynamiquement des attributs `aria-label` uniques pour chaque bouton de suppression (ex: `aria-label="Supprimer l'étape 3"`).
+* **Feedback lecteur d'écran** : En mettant à jour les `aria-label` lors du réordonnancement, on garantit que l'utilisateur malvoyant sait exactement quelle étape il s'apprête à modifier ou supprimer.
+
+#### 4. Initialisation "Edit Mode"
+* Le script est conçu pour être **réutilisable** : au chargement de la page, il vérifie si le champ JSON contient déjà des données. Si c'est le cas (mode édition), il parse le JSON et génère automatiquement l'interface graphique correspondante, permettant une transition transparente entre l'affichage statique de la base de données et l'édition dynamique.
 ## ÉTAPE 24 : TESTS UNITAIRES PHPUNIT
 
 <a id="etape-24--tests-unitaires-phpunit"></a>
@@ -11553,32 +11571,27 @@ Le projet Les Restes est dans un état **fonctionnel et professionnel** avec les
 
 ---
 
-### Planning restant (Décembre 2025 - Avril 2026)
+## Planning de finalisation (Décembre 2025 - Mars 2026)
 
-#### Décembre 2025 - Janvier 2026
+#### Décembre 2025 - Janvier 2026 : Qualité, Sécurité et Accessibilité
+* [ ] **Tests unitaires PHPUnit** : Finaliser la couverture des entités et services (objectif > 50%).
+* [ ] **Tests fonctionnels** : Validation des scénarios critiques (inscription, dépôt de recette, système de favoris).
+* [ ] **Audit de sécurité** : Documentation des tests de vulnérabilité selon les standards **OWASP**.
+* [ ] **Lissage Accessibilité** : Correction finale des pages "Profil" et "Contact" pour garantir un score Lighthouse proche de 100%.
 
--   [ ] Tests unitaires PHPUnit (minimum 50% couverture)
--   [ ] Tests fonctionnels
--   [ ] Documentation tests OWASP
+#### Février 2026 : Documentation Technique et Standardisation
+* [ ] **Standardisation PSR-12** : Mise en conformité totale du code via l'outil `PHP-CS-Fixer`.
+* [ ] **Conception UML** : Finalisation des diagrammes de cas d'usage (Use Case) et de classes pour le dossier technique.
+* [ ] **Documentation Projet** : Rédaction du `README.md` final et du guide de déploiement (`DEPLOIEMENT.md`).
+* [ ] **Veille technologique** : Rédaction du rapport de veille stratégique (`VEILLE.md`).
+* [ ] **Jeu d'essai** : Extension des fixtures pour assurer une démonstration riche lors de la soutenance.
 
-#### Février 2026
-
--   [ ] Documentation déploiement (DEPLOIEMENT.md)
--   [ ] README.md professionnel
--   [ ] Jeu d'essai complet (fixtures étendues)
-
-#### Mars 2026
-
--   [ ] Diagrammes UML (cas d'usage, classes)
--   [ ] Veille technologique (VEILLE.md)
--   [ ] PSR-12 (PHP-CS-Fixer)
-
-#### Avril 2026 (avant examen)
-
--   [ ] Relecture complète
--   [ ] Préparation soutenance
--   [ ] Démo vidéo (optionnel)
-
+#### Mars 2026 : Clôture et Préparation à la Soutenance
+* [ ] **Optimisation de Production** : Build final des assets (`npm run build`) et nettoyage des caches.
+* [ ] **Cohérence Dossier/Code** : Relecture croisée entre le code source et le Dossier Professionnel (DP).
+* [ ] **Support de Présentation** : Finalisation du diaporama de soutenance.
+* [ ] **Répétitions** : Simulations de présentation orale et préparation aux questions techniques du jury.
+* [ ] **EXAMEN FINAL** : Passage devant le jury et obtention du titre (fin mars).
 ---
 
 ### Points forts du projet
@@ -11591,15 +11604,14 @@ Le projet Les Restes est dans un état **fonctionnel et professionnel** avec les
 6. **Principe DRY** : Formulaires réutilisables (\_form.html.twig)
 
 ---
-
-**Le projet est en bonne voie pour la soutenance d'avril 2026 !**
+**
 
 ---
 
 _Documentation complète - Novembre 2025_
 **Dernière mise à jour** : Novembre 2025
 **Statut** : En développement actif
-**Graduation prévue** : Avril 2026
+**Graduation prévue** : Mars 2026
 
 ---
 
