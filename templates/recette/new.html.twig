@@ -63,7 +63,7 @@
             <div id="ingredients-collection" 
                  class="mb-3" 
                  data-index="{{ form.recetteIngredients|length }}"
-                 {# Le prototype doit être généré via form_widget pour que ton JS trouve les inputs/selects #}
+                
                  data-prototype="{{ form_widget(form.recetteIngredients.vars.prototype)|e('html_attr') }}">
                 
                 {% for row in form.recetteIngredients %}
@@ -77,11 +77,11 @@
             
             <hr class="my-4">
             
-            {# --- ÉTAPES (MATCH AVEC TON JS) --- #}
+            {# --- ÉTAPES --- #}
             <h2 class="h5 text-success mb-3">Étapes de préparation</h2>
             
             <div id="etapes-collection" class="mb-3">
-                {# Ton JS injecte les .etape-row ici #}
+                
             </div>
 
             <button type="button" class="btn btn-outline-success btn-sm mb-4" id="add-etape">
@@ -108,7 +108,7 @@
                 </button>
             </div>
 
-            {# Rend les champs restants (comme le token CSRF) #}
+           
             {{ form_rest(form) }}
             {{ form_end(form) }}
         </div>
