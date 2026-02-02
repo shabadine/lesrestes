@@ -21,8 +21,11 @@ final class SearchController extends AbstractController
         PaginatorInterface $paginator
     ): Response {
         // 1) Liste paginée de tous les ingrédients
+        $ingredientsQb = $ingredientRepository->createQueryBuilder('i')
+            ->orderBy('i.nom', 'ASC');
+
         $ingredients = $paginator->paginate(
-            $ingredientRepository->createAllOrderedByNameQueryBuilder(),
+            $ingredientsQb,
             $request->query->getInt('page_ing', 1),
             20
         );
@@ -39,7 +42,20 @@ final class SearchController extends AbstractController
             );
 
             if ($searchTerms) {
-                $selectedIngredients = $ingredientRepository->searchByNames($searchTerms);
+                $qb           = $ingredientRepository->createQueryBuilder('i');
+                $orConditions = $qb->expr()->orX();
+
+                foreach ($searchTerms as $index => $term) {
+                    $paramName = "term_$index";
+                    $orConditions->add("i.nom LIKE :$paramName");
+                    $qb->setParameter($paramName, '%' . $term . '%');
+                }
+
+                $selectedIngredients = $qb
+                    ->where($orConditions)
+                    ->orderBy('i.nom', 'ASC')
+                    ->getQuery()
+                    ->getResult();
             }
         }
 
@@ -51,7 +67,7 @@ final class SearchController extends AbstractController
             );
 
             if ($ids) {
-                $selectedById = $ingredientRepository->findByIdsOrdered($ids);
+                $selectedById = $ingredientRepository->findBy(['id' => $ids]);
 
                 foreach ($selectedById as $ingredient) {
                     if (!in_array($ingredient, $selectedIngredients, true)) {
