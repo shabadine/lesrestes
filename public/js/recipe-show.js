@@ -1,50 +1,64 @@
 // recipe-show.js
-(function () {
+(() => {
+    
     if (window.recipeShowScriptLoaded) return;
     window.recipeShowScriptLoaded = true;
 
-    function init() {
-        const btn = document.getElementById('favoriBtn');
+    const init = () => {
+        const btn = document.getElementById("favoriBtn");
         if (!btn) return;
 
-        btn.addEventListener('click', async () => {
+        const icon = document.getElementById("favoriIcon");
+        const text = document.getElementById("favoriText");
+
+        btn.addEventListener("click", async () => {
             const recetteId = btn.dataset.recetteId;
-            const icon = document.getElementById('favoriIcon');
-            const text = document.getElementById('favoriText');
+            if (!recetteId) return;
 
             btn.disabled = true;
 
             try {
-                const response = await fetch(`/api/favori/toggle/${recetteId}`, {
-                    method: 'POST',
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                const res = await fetch(`/api/favori/toggle/${recetteId}`, {
+                    method: "POST",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}`);
                 }
 
-                const data = await response.json();
+                const data = await res.json();
+                if (!data.success) return;
 
-                if (data.success) {
-                    const isFav = data.isFavorite;
-                    icon.classList.toggle('bi-heart-fill', isFav);
-                    icon.classList.toggle('bi-heart', !isFav);
-                    text.textContent = isFav
-                        ? 'Retirer des favoris'
-                        : 'Ajouter aux favoris';
-                    btn.setAttribute('aria-label', text.textContent);
-                }
-            } catch (e) {
-                console.error(e);
+                const isFavorite = data.isFavorite;
+
+                
+                icon.classList.toggle("bi-heart-fill", isFavorite);
+                icon.classList.toggle("bi-heart", !isFavorite);
+
+                text.textContent = isFavorite
+                    ? "Retirer des favoris"
+                    : "Ajouter aux favoris";
+
+                btn.setAttribute("aria-label", text.textContent);
+
+                
+                icon.classList.add("scale");
+                setTimeout(() => icon.classList.remove("scale"), 200);
+
+            } catch (err) {
+                console.error("Erreur favori :", err);
             } finally {
                 btn.disabled = false;
             }
         });
-    }
+    };
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
+    
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
     } else {
         init();
     }

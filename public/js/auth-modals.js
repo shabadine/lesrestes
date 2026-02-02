@@ -1,17 +1,16 @@
-// Switch entre modales connexion/inscription
-function switchToRegister(e) {
-    e.preventDefault();
-    const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
-    loginModal.hide();
-    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
-    registerModal.show();
-}
+(() => {
+    if (window.authModalScriptLoaded) return;
+    window.authModalScriptLoaded = true;
 
+    window.switchModal = function (e, fromId, toId) {
+        e.preventDefault();
 
-function switchToLogin(e) {
-    e.preventDefault();
-    const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
-    registerModal.hide();
-    const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-    loginModal.show();
-}
+        const fromEl = document.getElementById(fromId);
+        const toEl = document.getElementById(toId);
+
+        if (!fromEl || !toEl) return;
+
+        bootstrap.Modal.getInstance(fromEl)?.hide();
+        new bootstrap.Modal(toEl).show();
+    };
+})();

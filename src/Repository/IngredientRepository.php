@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Ingredient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
+
 
 /**
  * @extends ServiceEntityRepository<Ingredient>
@@ -28,4 +30,19 @@ class IngredientRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+     public function createAdminSearchQueryBuilder(?string $search): QueryBuilder
+    {
+    $qb = $this->createQueryBuilder('i')
+        ->orderBy('i.nom', 'ASC');
+
+    if ($search) {
+        $qb->andWhere('LOWER(i.nom) LIKE LOWER(:search)')
+           ->setParameter('search', '%' . strtolower($search) . '%');
+    }
+
+    return $qb;
+    }
+
+
 }

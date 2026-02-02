@@ -24,26 +24,20 @@ class AdminIngredientController extends AbstractController
         PaginatorInterface $paginator
     ): Response {
         $search = $request->query->get('search', '');
-        
-        $queryBuilder = $ingredientRepository->createQueryBuilder('i')
-            ->orderBy('i.nom', 'ASC');
-        
-        if ($search) {
-            $queryBuilder
-                ->where('i.nom LIKE :search')
-                ->setParameter('search', '%' . $search . '%');
-        }
-        
+
+        $queryBuilder = $ingredientRepository->createAdminSearchQueryBuilder($search);
+
         $pagination = $paginator->paginate(
-            $queryBuilder,
-            $request->query->getInt('page', 1),
-            20
-        );
-        
-        return $this->render('admin/ingredient/index.html.twig', [
-            'ingredients' => $pagination,
-            'search' => $search,
-        ]);
+        $queryBuilder,
+        $request->query->getInt('page', 1),
+        20
+    );
+
+     return $this->render('admin/ingredient/index.html.twig', [
+    'ingredients' => $pagination,
+    'search'      => $search,
+    ]);
+
     }
 
     #[Route('/new', name: 'app_admin_ingredient_new', methods: ['GET', 'POST'])]
