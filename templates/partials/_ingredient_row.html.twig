@@ -1,0 +1,19 @@
+<div class="ingredient-row mb-2">
+    <div class="row g-2 align-items-end">
+        <div class="col-md-5">
+            {# Ici, on utilise 'ingredient' car c'est ce que ton JS cherche via querySelector #}
+            {{ form_widget(form.ingredient, {'attr': {'class': 'form-select'}}) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_widget(form.quantite, {'attr': {'class': 'form-control', 'placeholder': 'Qté'}}) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_widget(form.unite, {'attr': {'class': 'form-select'}}) }}
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-outline-danger w-100 remove-ingredient">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+    </div>
+</div>

@@ -61,15 +61,21 @@
 </div>
 
 <script>
-// Logique JS : On garde le menu ouvert si des filtres sont déjà actifs
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
-    // On vérifie si un paramètre autre que 'page' est présent
+    // On vérifie si un paramètre de filtre est présent dans l'URL
     const hasFilters = Array.from(urlParams.keys()).some(key => key.includes('recherche_avancee'));
     
-    if (hasFilters) {
-        const collapseEl = document.getElementById('searchCollapse');
-        const bsCollapse = new bootstrap.Collapse(collapseEl, { show: true });
+    const collapseEl = document.getElementById('searchCollapse');
+    
+    // On vérifie que l'élément existe bien sur la page avant d'agir
+    if (hasFilters && collapseEl) {
+        try {
+            const bsCollapse = new bootstrap.Collapse(collapseEl, { show: true });
+        } catch (e) {
+            // Repli si l'objet bootstrap n'est pas encore chargé
+            collapseEl.classList.add('show');
+        }
     }
 });
 </script>

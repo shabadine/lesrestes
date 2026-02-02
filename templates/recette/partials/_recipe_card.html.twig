@@ -1,4 +1,4 @@
-{# Carte recette reutilisable #}
+{# Carte recette réutilisable #}
 {% set show_author = show_author ?? true %}
 <div class="card h-100 shadow-sm border-0">
     {% if recette.image %}
@@ -12,20 +12,34 @@
         <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
              style="height: 312px;"
              role="img"
-             aria-label="Image d'illustration par défaut pour la recette {{ recette.nom }}">
-            <i class="bi bi-image text-secondary" aria-hidden="true" style="font-size: 4rem;"></i>
+             aria-label="Image par défaut : {{ recette.nom }}">
+            <i class="bi bi-image text-secondary" style="font-size: 4rem;"></i>
         </div>
     {% endif %}
 
     <div class="card-body d-flex flex-column">
         <h3 class="card-title h5 font-weight-bold">{{ recette.nom }}</h3>
+
+        {% if selectedIngredients is defined and selectedIngredients|length > 0 %}
+            {% set matchCount = 0 %}
+            {% for recetteIngredient in recette.recetteIngredients %}
+                {% if recetteIngredient.ingredient in selectedIngredients %}
+                    {% set matchCount = matchCount + 1 %}
+                {% endif %}
+            {% endfor %}
+            {% if matchCount > 0 %}
+                <div>
+                    <span class="badge bg-success mb-2">
+                        <i class="bi bi-check2-circle"></i> {{ matchCount }}/{{ recette.recetteIngredients|length }} ingrédients
+                    </span>
+                </div>
+            {% endif %}
+        {% endif %}
+        
     
         <div class="mb-2" role="img" aria-label="Note : {{ recette.moyenneNotes|default(0)|round }} sur 5 étoiles">
             {% set note = recette.moyenneNotes|default(0)|round %}
-            {% for i in 1..5 %}
-                <i class="bi bi-star{{ i <= note ? '-fill' : '' }} text-warning" aria-hidden="true"></i>
-            {% endfor %}
-            
+            {% for i in 1..5 %}<i class="bi bi-star{{ i <= note ? '-fill' : '' }} text-warning"></i>{% endfor %}
             <span class="ms-1 small text-secondary">({{ recette.commentaires|length }})</span>
         </div>
         
@@ -34,28 +48,23 @@
         </p>
         
         <div class="row text-center small text-dark mb-3">
-            <div class="col-4" aria-label="Temps de cuisson">
-                <i class="bi bi-clock" aria-hidden="true"></i> {{ recette.tempsCuisson }} min
+            <div class="col-4"><i class="bi bi-clock"></i> {{ recette.tempsCuisson }} min</div>
+            <div class="col-4 border-start border-end">
+                <i class="bi bi-person-gear"></i> 
+                {% if recette.difficulte == 1 %}Facile{% elseif recette.difficulte == 2 %}Moyen{% else %}Difficile{% endif %}
             </div>
-            <div class="col-4 border-start border-end" aria-label="Difficulté">
-                <i class="bi bi-person-gear" aria-hidden="true"></i> 
-                {% if recette.difficulte == 1 %}Facile
-                {% elseif recette.difficulte == 2 %}Moyen
-                {% else %}Difficile{% endif %}
-            </div>
-            <div class="col-4" aria-label="Nombre de personnes">
-                <i class="bi bi-people" aria-hidden="true"></i> {{ recette.nombrePersonnes }}
-            </div>
+            <div class="col-4"><i class="bi bi-people"></i> {{ recette.nombrePersonnes }}</div>
         </div>
         
         <div class="d-flex justify-content-between align-items-center mt-auto">
-            <small class="text-secondary">Par <strong>{{ recette.user.prenom }}</strong></small>
+            {% if show_author %}
+                <small class="text-secondary">Par <strong>{{ recette.user.prenom }}</strong></small>
+            {% endif %}
             
             <a href="{{ path('app_recette_show', {'id': recette.id}) }}" 
                class="btn btn-success btn-sm px-3 py-2" 
-               style="min-height: 44px; display: flex; align-items: center;"
-               aria-label="Voir la recette complète de {{ recette.nom }}">
-                <i class="bi bi-eye me-1" aria-hidden="true"></i> Voir
+               style="min-height: 44px; display: flex; align-items: center;">
+                <i class="bi bi-eye me-1"></i> Voir
             </a>
         </div>
     </div>

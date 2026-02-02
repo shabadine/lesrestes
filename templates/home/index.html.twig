@@ -1,117 +1,45 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil - Les Restes{% endblock %}
-{% block meta %}
-    <meta name="description" content="Transformez vos restes en délicieuses recettes. Découvrez des idées simples, rapides et économiques pour cuisiner avec ce que vous avez déjà.">
-{% endblock %}
 
 {% block body %}
 <main id="main-content" class="container">
-<!-- Hero Section -->
-<div class="hero-section text-center py-5 mb-5">
-    <h1 class="display-4 mb-4">
-        Transformez vos restes<br>
-        en délicieuses recettes
-    </h1>
-    
-    <!-- Icone du bol -->
-   {{ include('partials/_icon_bol.html.twig') }}
+    <div class="hero-section text-center py-5 mb-5">
+        <h1 class="display-4 mb-4">Transformez vos restes<br>en délicieuses recettes</h1>
+        
+        {{ include('partials/_icon_bol.html.twig') }}
 
-    
-    <!-- Barre de recherche -->
-    <div class="row justify-content-center mb-4">
-        <div class="col-11 col-md-8">
-            <form action="{{ path('app_search') }}" method="GET">
-                <div class="input-group">
-                    <input type="text" 
-                        class="form-control" 
-                        name="q" 
-                        placeholder="Entrez vos ingrédients..." 
-                        aria-label="Rechercher des recettes">
-                    <button class="btn btn-search-hero text-white" type="submit" aria-label="Lancer la recherche">
-                        <i class="bi bi-search" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-<!-- Section Dernieres recettes -->
-<div class="row mb-4">
-    <div class="col-12">
-        <h2 class="mb-4">Dernieres recettes ajoutees</h2>
-    </div>
-</div>
-
-<div class="row">
-    {% for recette in dernieresRecettes %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                {% if recette.image %}
-                    <img src="{{ asset('uploads/recettes/' ~ recette.image) | imagine_filter('thumb_recette') }}"
-                         class="card-img-top" 
-                         width="612" height="312"
-                         loading="lazy"
-                         style="height: 312px; object-fit: cover;"
-                         alt="Photo de la recette :{{ recette.nom }}">
-                {% else %}
-                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
-                         style="height: 250px;"
-                         role="img"
-                          aria-label="Aucune image disponible pour {{ recette.nom }}">
-                        <i class="bi bi-image text-muted" aria-hidden="true" style="font-size: 4rem;"></i>
+        <div class="row justify-content-center mb-4">
+            <div class="col-11 col-md-8">
+                <form action="{{ path('app_search') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" placeholder="Entrez vos ingrédients...">
+                        <button class="btn btn-search-hero text-white" type="submit"><i class="bi bi-search"></i></button>
                     </div>
-                {% endif %}
-                
-                <div class="card-body">
-                    <h3 class="card-title">{{ recette.nom }}</h3>
-                    
-                    <div class="mb-2" role="img" aria-label="Note : {{ recette.moyenneNotes|default(0)|round }} sur 5 etoiles">
-                        {% if recette.moyenneNotes %}
-                            {% for i in 1..5 %}
-                                {% if i <= recette.moyenneNotes %}
-                                    <i class="bi bi-star-fill text-warning" aria-hidden="true"></i>
-                                {% else %}
-                                    <i class="bi bi-star text-warning" aria-hidden="true"></i>
-                                {% endif %}
-                            {% endfor %}
-                            {% if recette.commentaires|length > 0 %}
-                                <span class="ms-1 small text-muted">({{ recette.commentaires|length }})</span>
-                            {% endif %}
-                        {% else %}
-                            {% for i in 1..5 %}
-                                <i class="bi bi-star text-warning" aria-hidden="true"></i>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                    
-                    <p class="card-text text-muted small">
-                        {{ recette.description|length > 80 ? recette.description|slice(0, 80) ~ '...' : recette.description }}
-                    </p>
-                    
-                    <a href="{{ path('app_recette_show', {'id': recette.id}) }}" 
-                       class="btn btn-outline-success btn-sm"
-                       aria-label="Voir la recette {{ recette.nom }}">
-                        <i class="bi bi-eye" aria-hidden="true"></i> Voir
-                    </a>
-                </div>
+                </form>
             </div>
         </div>
-    {% else %}
-        <div class="col-12">
-            <div class="alert alert-info" role="alert">
-                <i class="bi bi-info-circle" aria-hidden="true"></i> Aucune recette disponible pour le moment.
-            </div>
-        </div>
-    {% endfor %}
-</div>
-
-{% if dernieresRecettes|length > 0 %}
-    <div class="text-center mt-4">
-        <a href="{{ path('app_recette_index') }}" class="btn btn-success btn-lg">
-            <i class="bi bi-collection" aria-hidden="true"></i> Voir toutes les recettes
-        </a>
     </div>
-{% endif %}
+
+    <h2 class="mb-4">Dernières recettes ajoutées</h2>
+
+    <div class="row">
+        {% for recette in dernieresRecettes %}
+            <div class="col-md-4 mb-4">
+                {# Utilisation de ton partial de carte #}
+                {{ include('recette/partials/_recipe_card.html.twig', {'recette': recette}) }}
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">Aucune recette disponible.</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if dernieresRecettes|length > 0 %}
+        <div class="text-center mt-4">
+            <a href="{{ path('app_recette_index') }}" class="btn btn-success btn-lg">Voir toutes les recettes</a>
+        </div>
+    {% endif %}
 </main>
 {% endblock %}

@@ -1,0 +1,25 @@
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex flex-wrap gap-2 align-items-center justify-content-center mb-3" id="selected-badges-container">
+            {% for ingredient in selectedIngredients %}
+                <span class="badge bg-success fs-6 p-2">
+                    {{ ingredient.nom }}
+                    <button type="button" class="btn-close btn-close-white ms-1 remove-ingredient-btn" data-id="{{ ingredient.id }}"></button>
+                </span>
+            {% endfor %}
+            
+            <input type="text" class="form-control form-control-sm d-inline-block" placeholder="Ajouter un ingrédient..." id="ingredientInput" list="ingredientsList" style="width: 200px;">
+            <datalist id="ingredientsList">
+                {% for ingredient in ingredients %}
+                    {% if ingredient not in selectedIngredients %}
+                        <option value="{{ ingredient.nom }}" data-id="{{ ingredient.id }}">
+                    {% endif %}
+                {% endfor %}
+            </datalist>
+        </div>
+        <button class="btn btn-outline-success btn-sm" id="add-ingredient-search">
+            <i class="bi bi-plus"></i> Ajouter au panier
+        </button>
+    </div>
+</div>

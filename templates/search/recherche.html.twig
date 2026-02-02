@@ -1,104 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Recherche par ingrédients - Les Restes{% endblock %}
+{% block title %}Recherche - Les Restes{% endblock %}
 
 {% block body %}
-<div class="container" 
-     id="search-page-container" 
+<div class="container" id="search-page-container" 
      data-selected="{{ selectedIngredients|map(i => i.id)|json_encode }}"
      data-search-url="{{ path('app_search') }}">
 
     <div class="hero-section text-center py-5 mb-5">
         <h1 class="display-4 mb-4">Quels ingrédients avez-vous ?</h1>
         
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex flex-wrap gap-2 align-items-center justify-content-center mb-3" id="selected-badges-container">
-                            {% for ingredient in selectedIngredients %}
-                                <span class="badge bg-success fs-6 p-2">
-                                    {{ ingredient.nom }}
-                                    <button type="button" 
-                                            class="btn-close btn-close-white ms-1 remove-ingredient-btn" 
-                                            style="font-size: 0.7rem;" 
-                                            data-id="{{ ingredient.id }}"></button>
-                                </span>
-                            {% endfor %}
-                            
-                            <input type="text" 
-                                   class="form-control form-control-sm d-inline-block" 
-                                   placeholder="Tapez ici..." 
-                                   id="ingredientInput"
-                                   style="width: 200px;"
-                                   list="ingredientsList">
-                            <datalist id="ingredientsList">
-                                {% for ingredient in ingredients %}
-                                    {% if ingredient not in selectedIngredients %}
-                                        <option value="{{ ingredient.nom }}" data-id="{{ ingredient.id }}">
-                                    {% endif %}
-                                {% endfor %}
-                            </datalist>
-                        </div>
-                        
-                        <button class="btn btn-outline-success btn-sm" id="add-ingredient-search">
-                            <i class="bi bi-plus"></i> Ajouter un ingrédient
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row justify-content-center mb-4">
-            <div class="col-11 col-md-8">
-                <form action="{{ path('app_search') }}" method="GET">
-                    <div style="display: flex !important; flex-wrap: nowrap !important;">
-                        <input type="text" 
-                               class="form-control" 
-                               name="q" 
-                               value="{{ app.request.query.get('q') }}" 
-                               placeholder="Tapez vos ingredients..."
-                               style="flex: 1 1 auto !important; width: auto !important; min-width: 0 !important;">
-                        <button type="submit" style="flex: 0 0 auto !important; width: auto !important; background-color: #e65100; border-color: #e65100; color: white; padding: 0.375rem 1rem; border-radius: 0 0.375rem 0.375rem 0;">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        {{ include('partials/_icon_bol.html.twig') }}
+        {{ include('partials/_ingredients_selector.html.twig') }}
+        {{ include('partials/_search_bar_simple.html.twig') }}
     </div>
 
     {% if recettes.getTotalItemCount > 0 %}
-        <h2 class="mb-4 text-center">Recettes possibles ({{ recettes.getTotalItemCount }})</h2>
+        <h2 class="mb-4 text-center">Résultats ({{ recettes.getTotalItemCount }})</h2>
         <div class="row">
             {% for recette in recettes %}
                 <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card h-100">
-                        <img src="{{ recette.image ? '/uploads/recettes/' ~ recette.image : '/images/placeholder.jpg' }}" 
-                             class="card-img-top" style="height: 250px; object-fit: cover;" 
-                             alt="{{ recette.nom }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ recette.nom }}</h5>
-                            
-                            {% set matchCount = 0 %}
-                            {% for recetteIngredient in recette.recetteIngredients %}
-                                {% if recetteIngredient.ingredient in selectedIngredients %}
-                                    {% set matchCount = matchCount + 1 %}
-                                {% endif %}
-                            {% endfor %}
-                            
-                            {% if matchCount > 0 %}
-                                <span class="badge bg-success mb-2">
-                                    {{ matchCount }}/{{ recette.recetteIngredients|length }} ingrédients correspondants
-                                </span>
-                            {% endif %}
-                            
-                            <p class="card-text text-muted small">{{ recette.description|slice(0, 80) }}...</p>
-                            <a href="{{ path('app_recette_show', {'id': recette.id}) }}" class="btn btn-outline-success btn-sm">
-                                <i class="bi bi-eye"></i> Voir la recette
-                            </a>
-                        </div>
-                    </div>
+                    {{ include('recette/partials/_recipe_card.html.twig', {
+                        'recette': recette,
+                        'selectedIngredients': selectedIngredients
+                    }) }}
                 </div>
             {% endfor %}
         </div>
@@ -106,9 +31,7 @@
             {{ knp_pagination_render(recettes) }}
         </div>
     {% elseif selectedIngredients|length > 0 or app.request.query.get('q') %}
-        <div class="alert alert-info text-center">
-            <i class="bi bi-info-circle"></i> Aucune recette trouvée.
-        </div>
+        <div class="alert alert-info text-center">Aucune recette trouvée.</div>
     {% endif %}
 </div>
 {% endblock %}
