@@ -5,6 +5,7 @@ Encore
     .setPublicPath('/build')
     .addEntry('app', './assets/app.js')
     .addEntry('search_ingredients', './assets/js/search-ingredients.js')
+    .addEntry('profile', './assets/js/profile.js')
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
