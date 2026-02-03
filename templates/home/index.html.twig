@@ -14,7 +14,9 @@
                 <form action="{{ path('app_search') }}" method="GET">
                     <div class="input-group">
                         <input type="text" class="form-control" name="q" placeholder="Entrez vos ingrédients...">
-                        <button class="btn btn-search-hero text-white" type="submit"><i class="bi bi-search"></i></button>
+                        <button class="btn btn-search-hero text-white" type="submit" aria-label="Lancer la recherche" title="Rechercher">
+                          <i class="bi bi-search" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </form>
             </div>

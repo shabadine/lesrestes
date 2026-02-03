@@ -1,23 +1,26 @@
 {% extends 'base.html.twig' %}
 
+{% block meta_description %}Publiez votre propre recette anti-gaspi sur Les Restes et partagez vos astuces culinaires avec la communauté.{% endblock %}
+
 {% block title %}Publier une nouvelle recette - Les Restes{% endblock %}
 
 {% block body %}
-<div class="container my-4">
-    <div class="mb-4">
+<main class="container my-4">
+    <nav class="mb-4" aria-label="Navigation de retour">
         <a href="{{ path('app_profil') }}" class="btn btn-outline-success">
-            <i class="bi bi-arrow-left"></i> Retour à mon profil
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Retour à mon profil
         </a>
-    </div>
+    </nav>
     
     <div class="row">
         <div class="col-lg-8 mx-auto">
-            <h1 class="text-success mb-4">Publier une nouvelle recette</h1>
+            <header>
+                <h1 class="text-success mb-4">Publier une nouvelle recette</h1>
+            </header>
             
             {{ form_start(form, {'attr': {'id': 'recette-form', 'novalidate': 'novalidate'}}) }}
             
-            {# --- INFORMATIONS GÉNÉRALES --- #}
-            <div class="card border-0 shadow-sm mb-4">
+            <section class="card border-0 shadow-sm mb-4">
                 <div class="card-body">
                     <div class="mb-3">
                         {{ form_label(form.nom, 'Titre de la recette', {'label_attr': {'class': 'form-label fw-bold'}}) }}
@@ -32,17 +35,17 @@
                     </div>
                     
                     <div class="mb-0">
-                        {{ form_label(form.imageFile, 'Photo de la recette', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        <label for="recette_imageFile_file" class="form-label fw-bold">Photo de la recette</label>
                         {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
-                        <small class="text-muted">JPG, PNG ou WebP (max 5Mo)</small>
+                        <p class="text-muted small">JPG, PNG ou WebP (max 5Mo)</p>
                         {{ form_errors(form.imageFile) }}
                     </div>
                 </div>
-            </div>
+            </section>
             
             <div class="row mb-4">
                 <div class="col-md-6">
-                    {{ form_label(form.tempsCuisson, 'Temps (min)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_label(form.tempsCuisson, 'Temps de préparation (min)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
                     {{ form_widget(form.tempsCuisson, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="col-md-6">
@@ -52,49 +55,46 @@
             </div>
 
             <div class="mb-4">
-                <label class="form-label fw-bold d-block">Difficulté</label>
+                {{ form_label(form.difficulte, 'Difficulté', {'label_attr': {'class': 'form-label fw-bold'}}) }}
                 {{ form_widget(form.difficulte) }}
             </div>
             
-            <hr class="my-4">
+            <hr class="my-4" aria-hidden="true">
             
-            {# --- SECTION INGRÉDIENTS --- #}
-            <h2 class="h5 text-success mb-3">Ingrédients</h2>
-            <div id="ingredients-collection" 
-                 class="mb-3" 
-                 data-index="{{ form.recetteIngredients|length }}"
-                
-                 data-prototype="{{ form_widget(form.recetteIngredients.vars.prototype)|e('html_attr') }}">
-                
-                {% for row in form.recetteIngredients %}
-                    {{ include('partials/_ingredient_row.html.twig', { 'form': row }) }}
-                {% endfor %}
-            </div>
+            <section>
+                <h2 class="h5 text-success mb-3">Ingrédients</h2>
+                <div id="ingredients-collection" 
+                     class="mb-3" 
+                     data-index="{{ form.recetteIngredients|length }}"
+                     data-prototype="{{ form_widget(form.recetteIngredients.vars.prototype)|e('html_attr') }}">
+                    
+                    {% for row in form.recetteIngredients %}
+                        {{ include('partials/_ingredient_row.html.twig', { 'form': row }) }}
+                    {% endfor %}
+                </div>
 
-            <button type="button" class="btn btn-outline-success btn-sm mb-4" id="add-ingredient">
-                <i class="bi bi-plus-lg"></i> Ajouter un ingrédient
-            </button>
+                <button type="button" class="btn btn-outline-success btn-sm mb-4" id="add-ingredient">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Ajouter un ingrédient
+                </button>
+            </section>
             
-            <hr class="my-4">
+            <hr class="my-4" aria-hidden="true">
             
-            {# --- ÉTAPES --- #}
-            <h2 class="h5 text-success mb-3">Étapes de préparation</h2>
-            
-            <div id="etapes-collection" class="mb-3">
-                
-            </div>
+            <section>
+                <h2 class="h5 text-success mb-3">Étapes de préparation</h2>
+                <div id="etapes-collection" class="mb-3"></div>
 
-            <button type="button" class="btn btn-outline-success btn-sm mb-4" id="add-etape">
-                <i class="bi bi-plus-lg"></i> Ajouter une étape
-            </button>
+                <button type="button" class="btn btn-outline-success btn-sm mb-4" id="add-etape">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Ajouter une étape
+                </button>
 
-            <div class="d-none">
-                {# Ton JS cherche cet ID pour remplir la chaîne de caractères finale #}
-                {{ form_widget(form.etapes) }}
-            </div>
-            {{ form_errors(form.etapes) }}
+                <div class="d-none">
+                    {{ form_widget(form.etapes) }}
+                </div>
+                {{ form_errors(form.etapes) }}
+            </section>
             
-            <hr class="my-4">
+            <hr class="my-4" aria-hidden="true">
 
             <div class="mb-4">
                 {{ form_label(form.categorie, 'Catégorie', {'label_attr': {'class': 'form-label fw-bold'}}) }}
@@ -104,19 +104,18 @@
             <div class="d-flex justify-content-between mt-5 mb-5">
                 <a href="{{ path('app_profil') }}" class="btn btn-outline-secondary">Annuler</a>
                 <button type="submit" class="btn btn-success px-5 shadow-sm">
-                    <i class="bi bi-check-circle"></i> Publier ma recette
+                    <i class="bi bi-check-circle" aria-hidden="true"></i> Publier ma recette
                 </button>
             </div>
 
-           
             {{ form_rest(form) }}
             {{ form_end(form) }}
         </div>
     </div>
-</div>
+</main>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/recipe-form.js') }}"></script>
+    <script src="{{ asset('js/recipe-form.js') }}" defer></script>
 {% endblock %}
