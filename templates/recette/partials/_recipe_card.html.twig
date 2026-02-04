@@ -1,11 +1,19 @@
 {# Carte recette réutilisable #}
 {% set show_author = show_author ?? true %}
+{# On définit si l'image est parmi les 3 premières pour la priorité d'affichage #}
+{% set is_priority = loop is defined and loop.index <= 3 %}
+
 <div class="card h-100 shadow-sm border-0">
     {% if recette.image %}
         <img src="{{ asset('uploads/recettes/' ~ recette.image) | imagine_filter('thumb_recette') }}" 
              class="card-img-top" 
              width="612" height="312"
-             loading="lazy"
+             {% if is_priority %}
+                fetchpriority="high"
+                loading="eager"
+             {% else %}
+                loading="lazy"
+             {% endif %}
              style="height: 312px; object-fit: cover;"
              alt="Photo de la recette : {{ recette.nom }}"> 
     {% else %}
@@ -36,7 +44,6 @@
             {% endif %}
         {% endif %}
         
-    
         <div class="mb-2" role="img" aria-label="Note : {{ recette.moyenneNotes|default(0)|round }} sur 5 étoiles">
             {% set note = recette.moyenneNotes|default(0)|round %}
             {% for i in 1..5 %}<i class="bi bi-star{{ i <= note ? '-fill' : '' }} text-warning"></i>{% endfor %}

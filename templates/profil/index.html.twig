@@ -2,33 +2,34 @@
 
 {% block title %}Mon Profil - Les Restes{% endblock %}
 
+{% block meta_description %}Gérez votre profil, vos recettes publiées et vos favoris sur Les Restes.{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
-    <script type="module">
+    <script type="module" defer>
         import '{{ asset('js/profile.js') }}';
     </script>
 {% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-{% endblock %}
-
 {% block body %}
 <div class="container my-5">
-    {# --- EN-TÊTE DU PROFIL --- #}
     <h1 class="text-center text-success mb-5">
         {{ user.prenom }} {{ user.nom }} <span class="text-secondary h5">({{ user.email|split('@')[0] }})</span>
     </h1>
     
     <div class="row mb-5 profile-card-wrapper">
         <div class="col-lg-5 mb-4 mb-lg-0">
-            <div class="card border-success h-100 shadow-sm">
+            <section class="card border-success h-100 shadow-sm" aria-labelledby="profile-info-title">
                 <div class="card-body text-center p-4 d-flex flex-column justify-content-center">
+                    <h2 id="profile-info-title" class="visually-hidden">Informations personnelles</h2>
                     {% if user.photo %}
                         <img src="{{ ('uploads/profils/' ~ user.photo) | imagine_filter('profil_full') }}" 
-                             alt="Photo de profil" 
+                             alt="Photo de profil de {{ user.prenom }}" 
+                             width="120" height="120"
+                             fetchpriority="high"
+                             loading="eager"
                              class="rounded-circle mx-auto mb-3 shadow-sm"
-                             style="width: 120px; height: 120px; object-fit: contain; background: #f8f9fa;">
+                             style="width: 120px; height: 120px; object-fit: cover; background: #f8f9fa;">
                     {% else %}
                         <div class="rounded-circle bg-success d-flex align-items-center justify-content-center mx-auto mb-3 shadow-sm" 
                              style="width: 120px; height: 120px;" role="img" aria-label="Avatar par défaut">
@@ -36,27 +37,27 @@
                         </div>
                     {% endif %}
                     
-                    <h2 class="h4 text-success mb-1">{{ user.prenom }} {{ user.nom }}</h2>
+                    <p class="h4 text-success mb-1">{{ user.prenom }} {{ user.nom }}</p>
                     <p class="text-secondary mb-3">{{ user.email }}</p>
                     
                     <a href="{{ path('app_profil_edit') }}" class="btn btn-outline-success">
                         <i class="bi bi-pencil" aria-hidden="true"></i> Modifier le profil
                     </a>
                 </div>
-            </div>
+            </section>
         </div>
         
-        {# --- STATISTIQUES --- #}
         <div class="col-lg-7">
-            <div class="card border-success h-100 shadow-sm">
+            <section class="card border-success h-100 shadow-sm" aria-labelledby="stats-title">
                 <div class="card-body p-4 d-flex flex-column justify-content-center">
-                    <h2 class="h5 text-success mb-4 text-center">Mes Statistiques</h2>
+                    <h2 id="stats-title" class="h5 text-success mb-4 text-center">Mes Statistiques</h2>
                     <div class="row align-items-center">
                         <div class="col-md-6 text-center">
                             <canvas id="statsChart" 
                                     data-published="{{ mesRecettes.getTotalItemCount }}" 
                                     data-favorites="{{ mesFavoris.getTotalItemCount }}"
-                                    width="200" height="200" role="img"></canvas>
+                                    width="200" height="200" 
+                                    role="img" aria-label="Graphique de mes statistiques"></canvas>
                         </div>
                         <div class="col-md-6">
                             <div class="d-flex flex-column gap-3">
@@ -76,31 +77,30 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
     
-    {# --- ONGLETS --- #}
     <div class="d-flex justify-content-between align-items-center mb-4">
-    <ul class="nav nav-tabs mb-4 border-bottom-0" id="profilTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active fw-bold" id="recettes-tab" data-bs-toggle="tab" data-bs-target="#recettes" type="button" role="tab">
-                <i class="bi bi-book me-1"></i> Mes Recettes
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link fw-bold" id="favoris-tab" data-bs-toggle="tab" data-bs-target="#favoris" type="button" role="tab">
-                <i class="bi bi-heart me-1"></i> Mes Favoris
-            </button>
-        </li>
-    </ul>
-    <a href="{{ path('app_recette_new') }}" class="btn btn-success shadow-sm">
-        <i class="bi bi-plus-circle me-1"></i> Publier une recette
-    </a>
+        <ul class="nav nav-tabs mb-4 border-bottom-0" id="profilTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-bold" id="recettes-tab" data-bs-toggle="tab" data-bs-target="#recettes" type="button" role="tab" aria-controls="recettes" aria-selected="true">
+                    <i class="bi bi-book me-1" aria-hidden="true"></i> Mes Recettes
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-bold" id="favoris-tab" data-bs-toggle="tab" data-bs-target="#favoris" type="button" role="tab" aria-controls="favoris" aria-selected="false">
+                    <i class="bi bi-heart me-1" aria-hidden="true"></i> Mes Favoris
+                </button>
+            </li>
+        </ul>
+        <a href="{{ path('app_recette_new') }}" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-circle me-1" aria-hidden="true"></i> Publier une recette
+        </a>
     </div>
+
     <div class="tab-content" id="profilTabContent">
-        {# --- CONTENU : MES RECETTES --- #}
-        <div class="tab-pane fade show active" id="recettes" role="tabpanel">
+        <div class="tab-pane fade show active" id="recettes" role="tabpanel" aria-labelledby="recettes-tab">
             {% if mesRecettes.getTotalItemCount > 0 %}
                 <div class="row">
                     {% for recette in mesRecettes %}
@@ -111,10 +111,12 @@
                             }) }}
                             <div class="d-flex gap-2 mt-2">
                                 <a href="{{ path('app_recette_edit', {'id': recette.id}) }}" class="btn btn-outline-primary btn-sm flex-grow-1">
-                                    <i class="bi bi-pencil"></i> Modifier
+                                    <i class="bi bi-pencil" aria-hidden="true"></i> Modifier
                                 </a>
-                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmerSuppression({{ recette.id }}, '{{ recette.nom|escape('js') }}')">
-                                    <i class="bi bi-trash"></i>
+                                <button type="button" class="btn btn-outline-danger btn-sm" 
+                                        onclick="confirmerSuppression({{ recette.id }}, '{{ recette.nom|escape('js') }}')"
+                                        aria-label="Supprimer la recette {{ recette.nom }}">
+                                    <i class="bi bi-trash" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -123,15 +125,14 @@
                 <div class="d-flex justify-content-center mt-4">{{ knp_pagination_render(mesRecettes) }}</div>
             {% else %}
                 <div class="text-center py-5 bg-light rounded shadow-sm">
-                    <i class="bi bi-journal-plus text-secondary" style="font-size: 4rem;"></i>
+                    <i class="bi bi-journal-plus text-secondary" style="font-size: 4rem;" aria-hidden="true"></i>
                     <h3 class="mt-3 text-dark">Aucune recette publiée</h3>
                     <a href="{{ path('app_recette_new') }}" class="btn btn-success mt-2">Publier une recette</a>
                 </div>
             {% endif %}
         </div>
         
-        {# --- CONTENU : MES FAVORIS --- #}
-        <div class="tab-pane fade" id="favoris" role="tabpanel">
+        <div class="tab-pane fade" id="favoris" role="tabpanel" aria-labelledby="favoris-tab">
             {% if mesFavoris.getTotalItemCount > 0 %}
                 <div class="row">
                     {% for favori in mesFavoris %}
@@ -146,7 +147,7 @@
                 <div class="d-flex justify-content-center mt-4">{{ knp_pagination_render(mesFavoris) }}</div>
             {% else %}
                 <div class="text-center py-5 bg-light rounded shadow-sm">
-                    <i class="bi bi-heart text-secondary" style="font-size: 4rem;"></i>
+                    <i class="bi bi-heart text-secondary" style="font-size: 4rem;" aria-hidden="true"></i>
                     <h3 class="mt-3 text-dark">Aucun favori</h3>
                     <a href="{{ path('app_recette_index') }}" class="btn btn-outline-success mt-2">Découvrir des recettes</a>
                 </div>
@@ -155,20 +156,18 @@
     </div>
 </div>
 
-{# --- FORMULAIRES DE SUPPRESSION CACHÉS --- #}
 {% for recette in mesRecettes %}
 <form method="post" action="{{ path('app_recette_delete', {'id': recette.id}) }}" id="delete-form-{{ recette.id }}" style="display: none;">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recette.id) }}">
 </form>
 {% endfor %}
 
-{# --- MODALE DE CONFIRMATION --- #}
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="h5 modal-title">Confirmer la suppression</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
             <div class="modal-body text-dark">
                 <p>Êtes-vous sûr de vouloir supprimer la recette <strong id="recetteName"></strong> ?</p>

@@ -9,12 +9,17 @@ liip_imagine:
 
     filter_sets:
         cache: ~
+        
+        # Utilisé sur les cartes (cards)
         thumb_recette:
-            quality: 75            
+            quality: 75
+            format: webp
             filters:
                 thumbnail:
                     size: [612, 312]
                     mode: outbound
+        
+        # Utilisé pour les bannières
         header_recette:
             quality: 80
             format: webp
@@ -22,11 +27,20 @@ liip_imagine:
                 thumbnail:
                     size: [1200, 400]
                     mode: outbound
+        
+        # Utilisé pour la photo de profil (corrigé pour Lighthouse)
         profil_full:
+            quality: 75
+            format: webp
             filters:
-                relative_resize: { widen: 120 }
+                thumbnail:
+                    size: [120, 120]
+                    mode: outbound
+        
+        # Utilisé dans les formulaires
         form_preview:
             quality: 75
+            format: webp
             filters:
                 thumbnail:
                     size: [150, 150]
