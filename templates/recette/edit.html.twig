@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Publier une nouvelle recette - Les Restes{% endblock %}
+{% block title %}Modifier la recette - {{ recette.nom }}{% endblock %}
 
 {% block body %}
 <div class="container my-4">
@@ -12,9 +12,10 @@
     
     <div class="row">
         <div class="col-lg-8 mx-auto">
-            <h1 class="text-success mb-4">Publier une nouvelle recette</h1>
+            <h1 class="text-success mb-4">Modifier : {{ recette.nom }}</h1>
             
-            {{ include('recette/_form.html.twig', {'button_label': 'Publier la recette'}) }}
+          
+            {{ include('recette/_form.html.twig', {'button_label': 'Enregistrer les modifications'}) }}
         </div>
     </div>
 </div>
@@ -22,5 +23,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/recipe-form.js"></script>
+    <script type="module">
+        import "{{ asset('js/recipe-form.js') }}";
+    </script>
 {% endblock %}

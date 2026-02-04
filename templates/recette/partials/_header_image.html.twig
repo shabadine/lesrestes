@@ -5,6 +5,7 @@
             <img src="{{ asset('uploads/recettes/' ~ recette.image) | imagine_filter('header_recette') }}" 
                 class="img-fluid w-100" 
                 width="1200" height="400"
+                fetchpriority="high"
                 style="max-height: 400px; object-fit: cover;" 
                 alt="Illustration de la recette : {{ recette.nom }}">
                     </div>

@@ -4,12 +4,13 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('profile') }}
+    <script type="module">
+        import '{{ asset('js/profile.js') }}';
+    </script>
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('profile') }}
 {% endblock %}
 
 {% block body %}

@@ -117,5 +117,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/recipe-form.js') }}" defer></script>
+    <script type="module">
+        import "{{ asset('js/recipe-form.js') }}";
+    </script>
 {% endblock %}

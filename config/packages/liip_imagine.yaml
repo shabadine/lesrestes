@@ -16,7 +16,8 @@ liip_imagine:
                     size: [612, 312]
                     mode: outbound
         header_recette:
-            quality: 85
+            quality: 80
+            format: webp
             filters:
                 thumbnail:
                     size: [1200, 400]
