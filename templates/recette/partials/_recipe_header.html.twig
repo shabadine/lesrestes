@@ -1,81 +1,83 @@
+{# templates/recette/partials/_recipe_header.html.twig #}
 {# En-tete de recette: titre, étoiles, icônes temps/difficulté/personnes, auteur et date
 Variable requise: recette, isFavorite #}
+
 <div class="container my-4">
-    <!-- Boutons retour et favoris -->
     <div class="recipe-header-actions d-flex justify-content-between align-items-center mb-4 gap-2">
-    <a href="{{ path('app_recette_index') }}" class="btn btn-outline-success">
-        <i class="bi bi-arrow-left" aria-hidden="true"></i> 
-        <span class="btn-text">Retour</span>
-    </a>
-    
-    {% if app.user %}
-        <button type="button" 
-                class="btn btn-warning" 
-                id="favoriBtn"
-                data-recette-id="{{ recette.id }}"
-                data-is-favorite="{{ isFavorite ? 'true' : 'false' }}"
-                aria-label="{{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">
-            <i class="bi bi-heart{{ isFavorite ? '-fill' : '' }}" id="favoriIcon" aria-hidden="true"></i>
-            <span id="favoriText" class="btn-text">{{ isFavorite ? 'Retirer' : 'Favoris' }}</span>
-        </button>
-    {% endif %}
-</div>
-
-    <!-- Titre -->
-    <h1 class="text-success mb-3">{{ recette.nom }}</h1>
-    <p class="lead mb-3">{{ recette.description|nl2br }}</p>
-
-    <!-- Étoiles -->
-    <div class="mb-3" role="img" aria-label="Note : {{ recette.moyenneNotes|default(0)|round }} sur 5 étoiles">
-        {% set moyenne = recette.moyenneNotes %}
-        {% if moyenne %}
-            {% for i in 1..5 %}
-                {% if i <= moyenne %}
-                    <i class="bi bi-star-fill text-warning fs-5" aria-hidden="true"></i>
-                {% else %}
-                    <i class="bi bi-star text-warning fs-5" aria-hidden="true"></i>
-                {% endif %}
-            {% endfor %}
-            <span class="ms-2 ">({{ recette.commentaires|length }} avis)</span>
+        
+        
+        {% if fromProfil %}
+            <a href="{{ path('app_profil') }}" class="btn btn-outline-success">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i> 
+                <span class="btn-text">Retour à mon profil</span>
+            </a>
         {% else %}
-            {% for i in 1..5 %}
-                <i class="bi bi-star text-warning fs-5" aria-hidden="true"></i>
-            {% endfor %}
-            <span class="ms-2 text-secondary">({{ recette.commentaires|length }} avis)</span>
+            <a href="{{ path('app_recette_index') }}" class="btn btn-outline-success">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i> 
+                <span class="btn-text">Retour au catalogue</span>
+            </a>
+        {% endif %}
+    
+        {% if app.user %}
+            <button type="button" 
+                    class="btn btn-warning" 
+                    id="favoriBtn"
+                    data-recette-id="{{ recette.id }}"
+                    data-is-favorite="{{ isFavorite ? 'true' : 'false' }}"
+                    aria-label="{{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">
+                <i class="bi bi-heart{{ isFavorite ? '-fill' : '' }}" id="favoriIcon" aria-hidden="true"></i>
+                <span id="favoriText" class="btn-text ms-1">{{ isFavorite ? 'Retirer' : 'Favoris' }}</span>
+            </button>
         {% endif %}
     </div>
 
-    <!-- Icônes temps/difficulté/personnes -->
+    <h1 class="text-success mb-3">{{ recette.nom }}</h1>
+    <p class="lead mb-3">{{ recette.description|nl2br }}</p>
+
+    <div class="mb-3" role="img" aria-label="Note : {{ recette.moyenneNotes|default(0)|round }} sur 5 étoiles">
+        {% set moyenne = recette.moyenneNotes %}
+        {% for i in 1..5 %}
+            {% if moyenne and i <= moyenne|round %}
+                <i class="bi bi-star-fill text-warning fs-5" aria-hidden="true"></i>
+            {% else %}
+                <i class="bi bi-star text-warning fs-5" aria-hidden="true"></i>
+            {% endif %}
+        {% endfor %}
+        <span class="ms-2 {% if not moyenne %}text-secondary{% endif %}">
+            ({{ recette.commentaires|length }} avis)
+        </span>
+    </div>
+
     <div class="d-flex gap-4 mb-3">
-        <div>
-            <i class="bi bi-clock text-success" aria-hidden="true"></i>
-            <span class="ms-1" aria-label="Temps de cuisson : {{ recette.tempsCuisson }} minutes">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-clock text-success me-1" aria-hidden="true"></i>
+            <span aria-label="Temps de cuisson : {{ recette.tempsCuisson }} minutes">
                 {{ recette.tempsCuisson }} min
             </span>
-      </div>
-        <div>
-            <i class="bi bi-trophy text-success" aria-hidden="true"></i>
-            <span class="ms-1">
+        </div>
+        <div class="d-flex align-items-center">
+            <i class="bi bi-trophy text-success me-1" aria-hidden="true"></i>
+            <span>
                 {% if recette.difficulte == 1 %}Facile
                 {% elseif recette.difficulte == 2 %}Moyen
                 {% else %}Difficile{% endif %}
             </span>
         </div>
-        <div>
-            <i class="bi bi-people text-success" aria-hidden="true"></i>
-            <span class="ms-1">{{ recette.nombrePersonnes }}pers.</span>
+        <div class="d-flex align-items-center">
+            <i class="bi bi-people text-success me-1" aria-hidden="true"></i>
+            <span>{{ recette.nombrePersonnes }} pers.</span>
         </div>
     </div>
 
-    <!-- Auteur et date -->
     <p class="recipe-meta-data mb-4 small">
-        Par {{ recette.user.prenom }} {{ recette.user.nom|first }}. - 
+        Par <strong>{{ recette.user.prenom }} {{ recette.user.nom|first }}.</strong> - 
         <time datetime="{{ recette.dateCreation|date('Y-m-d') }}">
             {{ recette.dateCreation|date('d M Y') }}
         </time>
     </p>
 </div>
 
+{# script JSON-LD  #}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org/",
@@ -83,9 +85,7 @@ Variable requise: recette, isFavorite #}
   "name": "{{ recette.nom|escape('js') }}",
   "description": "{{ recette.description|striptags|escape('js') }}",
   {% if recette.image %}
-  "image": [
-    "{{ absolute_url(asset('uploads/recettes/' ~ recette.image)) }}"
-  ],
+  "image": ["{{ absolute_url(asset('uploads/recettes/' ~ recette.image)) }}"],
   {% endif %}
   "author": {
     "@type": "Person",
@@ -94,7 +94,6 @@ Variable requise: recette, isFavorite #}
   "datePublished": "{{ recette.dateCreation|date('Y-m-d') }}",
   "prepTime": "PT{{ recette.tempsCuisson }}M",
   "recipeYield": "{{ recette.nombrePersonnes }} personnes",
-  {# N'afficher les notes que s'il y a des avis pour éviter les erreurs Google #}
   {% if recette.commentaires|length > 0 %}
   "aggregateRating": {
     "@type": "AggregateRating",
