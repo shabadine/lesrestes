@@ -1,3 +1,3 @@
 framework:
     mailer:
-        dsn: '%env(MAILER_DSN)%'
+        dsn: 'smtp://8f94e65a553955:4d151e1b9b6fcd@sandbox.smtp.mailtrap.io:2525?verify_peer=0&verify_host=0'

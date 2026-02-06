@@ -6,35 +6,41 @@ use App\Form\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function index(Request $request): Response
+    public function index(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
+        if ($request->isMethod('POST')) {
             
-            // TODO: Implémenter l'envoi d'email avec Symfony Mailer
-            // Pour l'instant, je simule juste l'envoi
-            
-            // Simule l'envoi
-            $this->addFlash('success', 'Votre message a ete envoye avec succes ! Nous vous repondrons dans les plus brefs delais.');
-            
-            // Logger l'information (pour développement)
-            error_log(sprintf(
-                "Contact form submission - From: %s (%s), Subject: %s, Message: %s",
-                $data['nom'],
-                $data['email'],
-                $data['sujet'],
-                substr($data['message'], 0, 50) . '...'
-            ));
-            
-            return $this->redirectToRoute('app_contact');
+            $data = $form->getData() ?? $request->request->all('contact');
+
+            if ($data) {
+                $email = (new Email())
+                    ->from($data['email'] ?? 'test@lesrestes.fr')
+                    ->to('admin@les-restes.fr') 
+                    ->subject('Nouveau message : ' . ($data['sujet'] ?? 'Sans sujet'))
+                    ->text(
+                        "Message de : " . ($data['nom'] ?? 'Inconnu') . "\n" .
+                        "Email : " . ($data['email'] ?? 'Non fourni') . "\n\n" .
+                        ($data['message'] ?? 'Pas de contenu')
+                    );
+
+                try {
+                    $mailer->send($email);
+                    $this->addFlash('success', 'Votre message a été envoyé avec succès !');
+                    return $this->redirectToRoute('app_contact');
+                } catch (\Exception $e) {
+                    $this->addFlash('danger', 'Erreur d\'envoi : ' . $e->getMessage());
+                }
+            }
         }
 
         return $this->render('contact/index.html.twig', [
