@@ -36,18 +36,10 @@ final class RecetteController extends AbstractController
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $data = $searchForm->getData();
 
-            if (!empty($data['query'])) {
-                $criteria['query'] = $data['query'];
-            }
-            if (!empty($data['categorie'])) {
-                $criteria['categorie'] = $data['categorie'];
-            }
-            if (!empty($data['difficulte'])) {
-                $criteria['difficulte'] = $data['difficulte'];
-            }
-            if (!empty($data['tempsMax'])) {
-                $criteria['tempsMax'] = $data['tempsMax'];
-            }
+            if (!empty($data['query'])) $criteria['query'] = $data['query'];
+            if (!empty($data['categorie'])) $criteria['categorie'] = $data['categorie'];
+            if (!empty($data['difficulte'])) $criteria['difficulte'] = $data['difficulte'];
+            if (!empty($data['tempsMax'])) $criteria['tempsMax'] = $data['tempsMax'];
 
             if (!empty($data['tri'])) {
                 $orderBy = match ($data['tri']) {
@@ -85,17 +77,13 @@ final class RecetteController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $recette->setUser($this->getUser());
-
             $this->hydrateIngredients($recette, $request, $ingredientRepository);
-
             $entityManager->persist($recette);
             $entityManager->flush();
 
             $this->addFlash('success', 'Recette créée avec succès !');
 
-            return $this->redirectToRoute('app_recette_show', [
-                'id' => $recette->getId(),
-            ]);
+            return $this->redirectToRoute('app_recette_show', ['id' => $recette->getId()]);
         }
 
         return $this->render('recette/new.html.twig', [
@@ -111,6 +99,16 @@ final class RecetteController extends AbstractController
         FavoriRepository $favoriRepository,
         EntityManagerInterface $entityManager
     ): Response {
+        $referer = $request->headers->get('referer');
+        $session = $request->getSession();
+        
+        $wasEditingFromProfil = $session->get('edit_origin_profil_' . $recette->getId());
+        $fromProfil = ($referer && str_contains($referer, '/profil')) || $wasEditingFromProfil;
+        
+        if ($wasEditingFromProfil) {
+            $session->remove('edit_origin_profil_' . $recette->getId());
+        }
+
         $recette->setVue($recette->getVue() + 1);
         $entityManager->flush();
 
@@ -130,21 +128,18 @@ final class RecetteController extends AbstractController
             $commentaire->setUser($this->getUser());
             $commentaire->setRecette($recette);
             $commentaire->setDateCreation(new \DateTimeImmutable());
-
             $entityManager->persist($commentaire);
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre commentaire a été publié !');
-
-            return $this->redirectToRoute('app_recette_show', [
-                'id' => $recette->getId(),
-            ]);
+            return $this->redirectToRoute('app_recette_show', ['id' => $recette->getId()]);
         }
 
         return $this->render('recette/show.html.twig', [
-            'recette'        => $recette,
-            'isFavorite'     => $isFavorite,
-            'commentaireForm'=> $form->createView(),
+            'recette'         => $recette,
+            'isFavorite'      => $isFavorite,
+            'fromProfil'      => $fromProfil,
+            'commentaireForm' => $form->createView(),
         ]);
     }
 
@@ -156,8 +151,11 @@ final class RecetteController extends AbstractController
         EntityManagerInterface $entityManager,
         IngredientRepository $ingredientRepository
     ): Response {
-        
-        
+        $referer = $request->headers->get('referer');
+        if ($referer && str_contains($referer, '/profil')) {
+            $request->getSession()->set('edit_origin_profil_' . $recette->getId(), true);
+        }
+
         $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
 
@@ -174,8 +172,6 @@ final class RecetteController extends AbstractController
         ]);
     }
 
-       
-
     #[Route('/{id}/delete', name: 'app_recette_delete', methods: ['POST'])]
     #[IsGranted('RECETTE_DELETE', subject: 'recette')]
     public function delete(
@@ -183,8 +179,6 @@ final class RecetteController extends AbstractController
         Recette $recette,
         EntityManagerInterface $entityManager
     ): Response {
-       
-        
         if ($this->isCsrfTokenValid('delete' . $recette->getId(), $request->request->get('_token'))) {
             $entityManager->remove($recette);
             $entityManager->flush();
@@ -196,31 +190,21 @@ final class RecetteController extends AbstractController
         return $this->redirectToRoute('app_recette_index');
     }
 
-    /**
-     * Hydrate les RecetteIngredients à partir des données POST (champ ingredient_id).
-     */
     private function hydrateIngredients(
         Recette $recette,
         Request $request,
         IngredientRepository $ingredientRepository
     ): void {
         $data = $request->request->all('recette')['recetteIngredients'] ?? [];
-
         foreach ($data as $index => $ingredientData) {
             $ingredientId = $ingredientData['ingredient_id'] ?? null;
-            if (empty($ingredientId)) {
-                continue;
-            }
+            if (empty($ingredientId)) continue;
 
             $ingredient = $ingredientRepository->find($ingredientId);
-            if (!$ingredient) {
-                continue;
-            }
+            if (!$ingredient) continue;
 
             $items = $recette->getRecetteIngredients()->toArray();
-            if (!isset($items[$index])) {
-                continue;
-            }
+            if (!isset($items[$index])) continue;
 
             $items[$index]->setIngredient($ingredient);
             $items[$index]->setRecette($recette);
