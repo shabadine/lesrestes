@@ -149,30 +149,23 @@ final class RecetteController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_recette_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('RECETTE_EDIT', subject: 'recette')] 
     public function edit(
         Request $request,
         Recette $recette,
         EntityManagerInterface $entityManager,
         IngredientRepository $ingredientRepository
     ): Response {
-        if ($recette->getUser() !== $this->getUser()) {
-            $this->addFlash('error', 'Vous ne pouvez pas modifier cette recette.');
-            return $this->redirectToRoute('app_recette_index');
-        }
-
+        
+        
         $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->hydrateIngredients($recette, $request, $ingredientRepository);
-
             $entityManager->flush();
-
             $this->addFlash('success', 'Recette modifiée avec succès !');
-
-            return $this->redirectToRoute('app_recette_show', [
-                'id' => $recette->getId(),
-            ]);
+            return $this->redirectToRoute('app_recette_show', ['id' => $recette->getId()]);
         }
 
         return $this->render('recette/edit.html.twig', [
@@ -181,21 +174,20 @@ final class RecetteController extends AbstractController
         ]);
     }
 
+       
+
     #[Route('/{id}/delete', name: 'app_recette_delete', methods: ['POST'])]
+    #[IsGranted('RECETTE_DELETE', subject: 'recette')]
     public function delete(
         Request $request,
         Recette $recette,
         EntityManagerInterface $entityManager
     ): Response {
-        if ($recette->getUser() !== $this->getUser()) {
-            $this->addFlash('error', 'Vous ne pouvez pas supprimer cette recette.');
-            return $this->redirectToRoute('app_recette_index');
-        }
-
+       
+        
         if ($this->isCsrfTokenValid('delete' . $recette->getId(), $request->request->get('_token'))) {
             $entityManager->remove($recette);
             $entityManager->flush();
-
             $this->addFlash('success', 'Recette supprimée avec succès !');
         } else {
             $this->addFlash('error', 'Token CSRF invalide.');

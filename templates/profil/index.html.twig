@@ -110,14 +110,19 @@
                                 'show_author': false
                             }) }}
                             <div class="d-flex gap-2 mt-2">
-                                <a href="{{ path('app_recette_edit', {'id': recette.id}) }}" class="btn btn-outline-primary btn-sm flex-grow-1">
-                                    <i class="bi bi-pencil" aria-hidden="true"></i> Modifier
-                                </a>
-                                <button type="button" class="btn btn-outline-danger btn-sm" 
-                                        onclick="confirmerSuppression({{ recette.id }}, '{{ recette.nom|escape('js') }}')"
-                                        aria-label="Supprimer la recette {{ recette.nom }}">
-                                    <i class="bi bi-trash" aria-hidden="true"></i>
-                                </button>
+                                {% if is_granted('RECETTE_EDIT', recette) %}
+                                   <a href="{{ path('app_recette_edit', {'id': recette.id}) }}" class="btn btn-outline-primary btn-sm flex-grow-1">
+                                      <i class="bi bi-pencil" aria-hidden="true"></i> Modifier
+                                    </a>
+                                {% endif %}
+
+                                {% if is_granted('RECETTE_DELETE', recette) %}
+                                    <button type="button" class="btn btn-outline-danger btn-sm" 
+                                            onclick="confirmerSuppression({{ recette.id }}, '{{ recette.nom|escape('js') }}')"
+                                            aria-label="Supprimer la recette {{ recette.nom }}">
+                                        <i class="bi bi-trash" aria-hidden="true"></i> Supprimer
+                                    </button>
+                                 {% endif %}
                             </div>
                         </div>
                     {% endfor %}
@@ -157,9 +162,11 @@
 </div>
 
 {% for recette in mesRecettes %}
+{% if is_granted('RECETTE_DELETE', recette) %}
 <form method="post" action="{{ path('app_recette_delete', {'id': recette.id}) }}" id="delete-form-{{ recette.id }}" style="display: none;">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recette.id) }}">
 </form>
+{% endif %}
 {% endfor %}
 
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
