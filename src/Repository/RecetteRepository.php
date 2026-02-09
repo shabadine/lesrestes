@@ -68,7 +68,7 @@ class RecetteRepository extends ServiceEntityRepository
     }
 
     /**
-     * Factorise la construction du QueryBuilder pour les filtres.
+     *  QueryBuilder pour les filtres.
      */
     private function buildFilterQuery(array $criteria = [], array $orderBy = []): QueryBuilder
     {
@@ -77,7 +77,6 @@ class RecetteRepository extends ServiceEntityRepository
             ->leftJoin('r.recetteIngredients', 'ri')
             ->leftJoin('ri.ingredient', 'i')
             ->groupBy('r.id');
-
         if (!empty($criteria['query'])) {
             $qb->andWhere('r.nom LIKE :query OR i.nom LIKE :query')
                ->setParameter('query', '%' . $criteria['query'] . '%');

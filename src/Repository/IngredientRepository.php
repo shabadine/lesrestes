@@ -44,5 +44,62 @@ class IngredientRepository extends ServiceEntityRepository
     return $qb;
     }
 
+    /**
+     * Liste paginable de tous les ingrédients (pour la colonne de gauche).
+     */
+    public function createAllOrderedByNameQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('i')
+            ->orderBy('i.nom', 'ASC');
+    }
+
+    /**
+     * Recherche d’ingrédients par plusieurs termes (OR) saisis dans q.
+     *
+     * @param string[] $terms
+     * @return Ingredient[]
+     */
+    public function searchByNames(array $terms): array
+    {
+        if (!$terms) {
+            return [];
+        }
+
+        $qb           = $this->createQueryBuilder('i');
+        $orConditions = $qb->expr()->orX();
+
+        foreach ($terms as $index => $term) {
+            $paramName = "term_$index";
+            $orConditions->add("i.nom LIKE :$paramName");
+            $qb->setParameter($paramName, '%' . $term . '%');
+        }
+
+        return $qb
+            ->where($orConditions)
+            ->orderBy('i.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère des ingrédients par IDs, triés par nom.
+     *
+     * @param int[] $ids
+     * @return Ingredient[]
+     */
+    public function findByIdsOrdered(array $ids): array
+    {
+        if (!$ids) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('i')
+            ->where('i.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('i.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 
 }

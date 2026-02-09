@@ -65,8 +65,9 @@
             {% endif %}
             
             <a href="{{ path('app_recette_show', {'id': recette.id}) }}" 
-               class="btn btn-success btn-sm px-3" 
-               style="min-height: 38px; display: flex; align-items: center;">
+            class="btn btn-success btn-sm px-3" 
+            style="min-height: 38px; display: flex; align-items: center;"
+            aria-label="Voir la recette de {{ recette.nom }}">
                 Voir
             </a>
         </div>

@@ -1,0 +1,15 @@
+{# templates/partials/_search_bar_simple.html.twig #}
+<div class="row justify-content-center mb-4">
+    <div class="col-11 col-md-8">
+        <form action="{{ path('app_search') }}" method="GET">
+            <div class="input-group">
+                <input type="text" class="form-control" name="q" 
+                       value="{{ app.request.query.get('q') }}" 
+                       placeholder="Rechercher par mot-clé (ex: Lasagnes)...">
+                <button type="submit" class="btn text-white" style="background-color: #e65100;">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

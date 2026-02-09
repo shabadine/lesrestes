@@ -31,7 +31,7 @@
     line-height: 1.4;
 }
 
-/* Fixer la hauteur de la description */
+/*description */
 .card-text {
     height: 3.5rem; 
     display: -webkit-box;
@@ -42,7 +42,7 @@
     font-size: 0.9rem;
 }
 
-/* Images réduites */
+/* Images */
 .card-img-top {
     height: 200px !important; 
     object-fit: cover;
@@ -70,4 +70,14 @@
     .card-img-top {
         height: 180px !important;
     }
+}
+
+.favori-icon.scale {
+  animation: favori-scale 0.2s ease-in-out;
+}
+
+@keyframes favori-scale {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }

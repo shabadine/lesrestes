@@ -71,6 +71,16 @@ LES RESTES - Classes utilitaires
     color: #fff !important;
 }
 
+.favori-icon.scale {
+  animation: favori-scale 0.2s ease-in-out;
+}
+
+@keyframes favori-scale {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
 /* Messages flash */
 .alert-success {
     background-color: rgba(76, 175, 80, 0.1);

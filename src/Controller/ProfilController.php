@@ -78,7 +78,7 @@ public function edit(
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        // Photo de profil
+        
         $photoFile = $form->get('photoFile')->getData();
         if ($photoFile) {
             $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);

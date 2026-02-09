@@ -39,7 +39,6 @@
 }
 
 .star-rating .btn-outline-warning:hover,
-.star-rating .btn-check:hover + .btn-outline-warning,
 .star-rating .btn-check:checked + .btn-outline-warning {
     color: #212529 !important;
     background-color: #ffc107 !important;
