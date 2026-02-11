@@ -57,21 +57,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Recette>
      */
-    #[ORM\OneToMany(targetEntity: Recette::class, mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Recette::class, mappedBy: 'user', orphanRemoval: true, cascade: ['remove'])]
     private Collection $recettes;
 
     /**
      * @var Collection<int, Favori>
      */
-    #[ORM\OneToMany(targetEntity: Favori::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Favori::class, mappedBy: 'user', cascade: ['remove'])]
     private Collection $favoris;
 
     /**
      * @var Collection<int, Commentaire>
      */
-    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'user', cascade: ['remove'])]
     private Collection $commentaires;
-   
+    
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
@@ -101,31 +101,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
@@ -133,9 +121,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -147,6 +132,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
     public function getPhoto(): ?string
     {
         return $this->photo;
@@ -158,9 +144,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
     public function __serialize(): array
     {
         $data = (array) $this;
@@ -172,7 +155,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[\Deprecated]
     public function eraseCredentials(): void
     {
-        // @deprecated, to be removed when upgrading to Symfony 8
     }
 
     public function getNom(): ?string
@@ -268,7 +250,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeRecette(Recette $recette): static
     {
         if ($this->recettes->removeElement($recette)) {
-            // set the owning side to null (unless already changed)
             if ($recette->getUser() === $this) {
                 $recette->setUser(null);
             }
@@ -298,7 +279,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeFavori(Favori $favori): static
     {
         if ($this->favoris->removeElement($favori)) {
-            // set the owning side to null (unless already changed)
             if ($favori->getUser() === $this) {
                 $favori->setUser(null);
             }
@@ -328,7 +308,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeCommentaire(Commentaire $commentaire): static
     {
         if ($this->commentaires->removeElement($commentaire)) {
-            // set the owning side to null (unless already changed)
             if ($commentaire->getUser() === $this) {
                 $commentaire->setUser(null);
             }
