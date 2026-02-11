@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Recette;
 use App\Entity\Commentaire;
-use App\Form\RecetteType;
+use App\Entity\Recette;
 use App\Form\CommentaireType;
+use App\Form\RecetteType;
 use App\Form\SearchAdvancedType;
 use App\Repository\FavoriRepository;
 use App\Repository\IngredientRepository;
@@ -25,27 +25,35 @@ final class RecetteController extends AbstractController
     public function index(
         Request $request,
         RecetteRepository $recetteRepository,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
     ): Response {
         $searchForm = $this->createForm(SearchAdvancedType::class);
         $searchForm->handleRequest($request);
 
         $criteria = [];
-        $orderBy  = ['dateCreation' => 'DESC'];
+        $orderBy = ['dateCreation' => 'DESC'];
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $data = $searchForm->getData();
 
-            if (!empty($data['query'])) $criteria['query'] = $data['query'];
-            if (!empty($data['categorie'])) $criteria['categorie'] = $data['categorie'];
-            if (!empty($data['difficulte'])) $criteria['difficulte'] = $data['difficulte'];
-            if (!empty($data['tempsMax'])) $criteria['tempsMax'] = $data['tempsMax'];
+            if (!empty($data['query'])) {
+                $criteria['query'] = $data['query'];
+            }
+            if (!empty($data['categorie'])) {
+                $criteria['categorie'] = $data['categorie'];
+            }
+            if (!empty($data['difficulte'])) {
+                $criteria['difficulte'] = $data['difficulte'];
+            }
+            if (!empty($data['tempsMax'])) {
+                $criteria['tempsMax'] = $data['tempsMax'];
+            }
 
             if (!empty($data['tri'])) {
                 $orderBy = match ($data['tri']) {
-                    'date_asc'   => ['dateCreation' => 'ASC'],
+                    'date_asc' => ['dateCreation' => 'ASC'],
                     'notes_desc' => ['moyenneNotes' => 'DESC'],
-                    default      => ['dateCreation' => 'DESC'],
+                    default => ['dateCreation' => 'DESC'],
                 };
             }
         }
@@ -59,7 +67,7 @@ final class RecetteController extends AbstractController
         );
 
         return $this->render('recette/index.html.twig', [
-            'recettes'   => $recettes,
+            'recettes' => $recettes,
             'searchForm' => $searchForm->createView(),
         ]);
     }
@@ -69,10 +77,10 @@ final class RecetteController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
-        IngredientRepository $ingredientRepository
+        IngredientRepository $ingredientRepository,
     ): Response {
         $recette = new Recette();
-        $form    = $this->createForm(RecetteType::class, $recette);
+        $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -88,7 +96,7 @@ final class RecetteController extends AbstractController
 
         return $this->render('recette/new.html.twig', [
             'recette' => $recette,
-            'form'    => $form,
+            'form' => $form,
         ]);
     }
 
@@ -97,16 +105,16 @@ final class RecetteController extends AbstractController
         Request $request,
         Recette $recette,
         FavoriRepository $favoriRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
         $referer = $request->headers->get('referer');
         $session = $request->getSession();
-        
-        $wasEditingFromProfil = $session->get('edit_origin_profil_' . $recette->getId());
+
+        $wasEditingFromProfil = $session->get('edit_origin_profil_'.$recette->getId());
         $fromProfil = ($referer && str_contains($referer, '/profil')) || $wasEditingFromProfil;
-        
+
         if ($wasEditingFromProfil) {
-            $session->remove('edit_origin_profil_' . $recette->getId());
+            $session->remove('edit_origin_profil_'.$recette->getId());
         }
 
         $recette->setVue($recette->getVue() + 1);
@@ -114,14 +122,14 @@ final class RecetteController extends AbstractController
 
         $isFavorite = false;
         if ($this->getUser()) {
-            $isFavorite = $favoriRepository->findOneBy([
-                'user'    => $this->getUser(),
+            $isFavorite = null !== $favoriRepository->findOneBy([
+                'user' => $this->getUser(),
                 'recette' => $recette,
-            ]) !== null;
+            ]);
         }
 
         $commentaire = new Commentaire();
-        $form        = $this->createForm(CommentaireType::class, $commentaire);
+        $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -132,28 +140,29 @@ final class RecetteController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre commentaire a été publié !');
+
             return $this->redirectToRoute('app_recette_show', ['id' => $recette->getId()]);
         }
 
         return $this->render('recette/show.html.twig', [
-            'recette'         => $recette,
-            'isFavorite'      => $isFavorite,
-            'fromProfil'      => $fromProfil,
+            'recette' => $recette,
+            'isFavorite' => $isFavorite,
+            'fromProfil' => $fromProfil,
             'commentaireForm' => $form->createView(),
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_recette_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('RECETTE_EDIT', subject: 'recette')] 
+    #[IsGranted('RECETTE_EDIT', subject: 'recette')]
     public function edit(
         Request $request,
         Recette $recette,
         EntityManagerInterface $entityManager,
-        IngredientRepository $ingredientRepository
+        IngredientRepository $ingredientRepository,
     ): Response {
         $referer = $request->headers->get('referer');
         if ($referer && str_contains($referer, '/profil')) {
-            $request->getSession()->set('edit_origin_profil_' . $recette->getId(), true);
+            $request->getSession()->set('edit_origin_profil_'.$recette->getId(), true);
         }
 
         $form = $this->createForm(RecetteType::class, $recette);
@@ -163,12 +172,13 @@ final class RecetteController extends AbstractController
             $this->hydrateIngredients($recette, $request, $ingredientRepository);
             $entityManager->flush();
             $this->addFlash('success', 'Recette modifiée avec succès !');
+
             return $this->redirectToRoute('app_recette_show', ['id' => $recette->getId()]);
         }
 
         return $this->render('recette/edit.html.twig', [
             'recette' => $recette,
-            'form'    => $form,
+            'form' => $form,
         ]);
     }
 
@@ -177,9 +187,9 @@ final class RecetteController extends AbstractController
     public function delete(
         Request $request,
         Recette $recette,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $recette->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$recette->getId(), $request->request->get('_token'))) {
             $entityManager->remove($recette);
             $entityManager->flush();
             $this->addFlash('success', 'Recette supprimée avec succès !');
@@ -193,18 +203,24 @@ final class RecetteController extends AbstractController
     private function hydrateIngredients(
         Recette $recette,
         Request $request,
-        IngredientRepository $ingredientRepository
+        IngredientRepository $ingredientRepository,
     ): void {
         $data = $request->request->all('recette')['recetteIngredients'] ?? [];
         foreach ($data as $index => $ingredientData) {
             $ingredientId = $ingredientData['ingredient_id'] ?? null;
-            if (empty($ingredientId)) continue;
+            if (empty($ingredientId)) {
+                continue;
+            }
 
             $ingredient = $ingredientRepository->find($ingredientId);
-            if (!$ingredient) continue;
+            if (!$ingredient) {
+                continue;
+            }
 
             $items = $recette->getRecetteIngredients()->toArray();
-            if (!isset($items[$index])) continue;
+            if (!isset($items[$index])) {
+                continue;
+            }
 
             $items[$index]->setIngredient($ingredient);
             $items[$index]->setRecette($recette);

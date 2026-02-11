@@ -25,15 +25,15 @@ class CommentaireType extends AbstractType
                 'expanded' => true,
                 'multiple' => false,
                 'label' => 'Note',
-                'attr' => ['class' => 'star-rating']
+                'attr' => ['class' => 'star-rating'],
             ])
             ->add('contenu', TextareaType::class, [
                 'label' => 'Votre commentaire',
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 3,
-                    'placeholder' => 'Partagez votre expérience...'
-                ]
+                    'placeholder' => 'Partagez votre expérience...',
+                ],
             ]);
     }
 

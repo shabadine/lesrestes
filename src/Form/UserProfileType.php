@@ -20,15 +20,15 @@ class UserProfileType extends AbstractType
         $builder
             ->add('prenom', TextType::class, [
                 'label' => 'Prénom',
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('nom', TextType::class, [
                 'label' => 'Nom',
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('photoFile', FileType::class, [
                 'label' => 'Photo de profil',
@@ -36,7 +36,7 @@ class UserProfileType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'accept' => 'image/*'
+                    'accept' => 'image/*',
                 ],
                 'constraints' => [
                     new File([
@@ -48,7 +48,7 @@ class UserProfileType extends AbstractType
                             'image/webp',
                         ],
                         'mimeTypesMessage' => 'Veuillez télécharger une image valide',
-                    ])
+                    ]),
                 ],
             ])
             ->add('currentPassword', PasswordType::class, [
@@ -57,8 +57,8 @@ class UserProfileType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Laissez vide si vous ne changez pas'
-                ]
+                    'placeholder' => 'Laissez vide si vous ne changez pas',
+                ],
             ])
             ->add('newPassword', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
@@ -66,7 +66,7 @@ class UserProfileType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Minimum 6 caractères'
+                    'placeholder' => 'Minimum 6 caractères',
                 ],
                 'constraints' => [
                     new Length([
@@ -82,8 +82,8 @@ class UserProfileType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Confirmer le nouveau mot de passe'
-                ]
+                    'placeholder' => 'Confirmer le nouveau mot de passe',
+                ],
             ])
         ;
     }

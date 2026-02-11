@@ -21,7 +21,7 @@ class ContactType extends AbstractType
                 'label' => 'Nom complet',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Votre nom et prenom'
+                    'placeholder' => 'Votre nom et prenom',
                 ],
                 'constraints' => [
                     // Correction ici : message au lieu de ['message' => ...]
@@ -31,25 +31,25 @@ class ContactType extends AbstractType
                         max: 100,
                         minMessage: 'Le nom doit contenir au moins {{ limit }} caracteres',
                         maxMessage: 'Le nom ne peut pas depasser {{ limit }} caracteres'
-                    )
-                ]
+                    ),
+                ],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'votre.email@exemple.com'
+                    'placeholder' => 'votre.email@exemple.com',
                 ],
                 'constraints' => [
                     new NotBlank(message: 'Veuillez entrer votre email'),
-                    new Email(message: 'Veuillez entrer un email valide')
-                ]
+                    new Email(message: 'Veuillez entrer un email valide'),
+                ],
             ])
             ->add('sujet', TextType::class, [
                 'label' => 'Sujet',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Objet de votre message'
+                    'placeholder' => 'Objet de votre message',
                 ],
                 'constraints' => [
                     new NotBlank(message: 'Veuillez entrer un sujet'),
@@ -58,15 +58,15 @@ class ContactType extends AbstractType
                         max: 150,
                         minMessage: 'Le sujet doit contenir au moins {{ limit }} caracteres',
                         maxMessage: 'Le sujet ne peut pas depasser {{ limit }} caracteres'
-                    )
-                ]
+                    ),
+                ],
             ])
             ->add('message', TextareaType::class, [
                 'label' => 'Votre message',
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 8,
-                    'placeholder' => 'Ecrivez votre message ici...'
+                    'placeholder' => 'Ecrivez votre message ici...',
                 ],
                 'constraints' => [
                     new NotBlank(message: 'Veuillez entrer un message'),
@@ -75,8 +75,8 @@ class ContactType extends AbstractType
                         max: 2000,
                         minMessage: 'Le message doit contenir au moins {{ limit }} caracteres',
                         maxMessage: 'Le message ne peut pas depasser {{ limit }} caracteres'
-                    )
-                ]
+                    ),
+                ],
             ])
         ;
     }

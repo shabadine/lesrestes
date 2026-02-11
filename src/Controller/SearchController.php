@@ -18,7 +18,7 @@ final class SearchController extends AbstractController
         Request $request,
         IngredientRepository $ingredientRepository,
         RecetteRepository $recetteRepository,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
     ): Response {
         // 1) Liste paginée de tous les ingrédients
         $ingredientsQb = $ingredientRepository->createQueryBuilder('i')
@@ -32,7 +32,7 @@ final class SearchController extends AbstractController
 
         /** @var Ingredient[] $selectedIngredients */
         $selectedIngredients = [];
-        $recettesResults     = [];
+        $recettesResults = [];
 
         // 2) Ingrédients depuis le champ libre q (ex: "tomate, basilic")
         $query = $request->query->get('q');
@@ -42,13 +42,13 @@ final class SearchController extends AbstractController
             );
 
             if ($searchTerms) {
-                $qb           = $ingredientRepository->createQueryBuilder('i');
+                $qb = $ingredientRepository->createQueryBuilder('i');
                 $orConditions = $qb->expr()->orX();
 
                 foreach ($searchTerms as $index => $term) {
                     $paramName = "term_$index";
                     $orConditions->add("i.nom LIKE :$paramName");
-                    $qb->setParameter($paramName, '%' . $term . '%');
+                    $qb->setParameter($paramName, '%'.$term.'%');
                 }
 
                 $selectedIngredients = $qb
@@ -79,7 +79,7 @@ final class SearchController extends AbstractController
 
         // 4) Recherche de recettes à partir des ingrédients sélectionnés
         if ($selectedIngredients) {
-            $selectedIds     = array_map(fn (Ingredient $i) => $i->getId(), $selectedIngredients);
+            $selectedIds = array_map(fn (Ingredient $i) => $i->getId(), $selectedIngredients);
             $recettesResults = $recetteRepository->findByIngredients(
                 $selectedIds,
                 requireAll: true
@@ -93,9 +93,9 @@ final class SearchController extends AbstractController
         );
 
         return $this->render('search/recherche.html.twig', [
-            'ingredients'         => $ingredients,
+            'ingredients' => $ingredients,
             'selectedIngredients' => $selectedIngredients,
-            'recettes'            => $recettes,
+            'recettes' => $recettes,
         ]);
     }
 }

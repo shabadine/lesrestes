@@ -13,10 +13,10 @@ class HomeController extends AbstractController
     public function index(RecetteRepository $recetteRepository): Response
     {
         $dernieresRecettes = $recetteRepository->findBy(
-            [], 
+            [],
             ['dateCreation' => 'DESC'],
             3);
-        
+
         return $this->render('home/index.html.twig', [
             'dernieresRecettes' => $dernieresRecettes,
         ]);

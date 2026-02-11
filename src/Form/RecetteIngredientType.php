@@ -21,11 +21,11 @@ class RecetteIngredientType extends AbstractType
                 'choice_label' => 'nom',
                 'placeholder' => 'Choisissez un ingrédient...',
                 'attr' => [
-                    'class' => 'ingredient-autocomplete-select'
-                ]
+                    'class' => 'ingredient-autocomplete-select',
+                ],
             ])
             ->add('quantite', TextType::class, [
-                'attr' => ['placeholder' => 'Ex: 250']
+                'attr' => ['placeholder' => 'Ex: 250'],
             ])
             ->add('unite', ChoiceType::class, [
                 'choices' => [
@@ -37,7 +37,7 @@ class RecetteIngredientType extends AbstractType
                     'Cuillère(s) à café' => 'c.à.c',
                     'Cuillère(s) à soupe' => 'c.à.s',
                     'Tasse(s)' => 'tasse(s)',
-                    'Pincée(s)' => 'pincée(s)'
+                    'Pincée(s)' => 'pincée(s)',
                 ],
                 'placeholder' => 'Unité',
             ]);

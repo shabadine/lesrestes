@@ -79,16 +79,17 @@ class Recette
      */
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'recette')]
     private Collection $commentaires;
-    public function __construct() 
+
+    public function __construct()
     {
-        $this->dateCreation = new \DateTimeImmutable(); 
-        $this->vue = 0; 
-        $this->difficulte = 1; 
+        $this->dateCreation = new \DateTimeImmutable();
+        $this->vue = 0;
+        $this->difficulte = 1;
         $this->nombrePersonnes = 4;
         $this->recetteIngredients = new ArrayCollection();
         $this->favoris = new ArrayCollection();
-        $this->commentaires = new ArrayCollection(); 
-    } 
+        $this->commentaires = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -226,20 +227,19 @@ class Recette
 
         return $this;
     }
-    public function setImageFile($imageFile)
-{
-    $this->imageFile = $imageFile;
-    if (null !== $imageFile) {
-        $this->updatedAt = new \DateTimeImmutable();
-    }
-}
 
+    public function setImageFile($imageFile)
+    {
+        $this->imageFile = $imageFile;
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
 
     public function getImageFile(): ?File
     {
         return $this->imageFile;
     }
-    
 
     public function getImageSize(): ?int
     {
@@ -249,6 +249,7 @@ class Recette
     public function setImageSize(?int $imageSize): static
     {
         $this->imageSize = $imageSize;
+
         return $this;
     }
 
@@ -260,9 +261,9 @@ class Recette
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
-
 
     /**
      * @return Collection<int, RecetteIngredient>
@@ -353,14 +354,16 @@ class Recette
 
         return $this;
     }
+
     public function getMoyenneNotes(): float
     {
-    $commentaires = $this->commentaires->toArray();
-    if (empty($commentaires)) {
-        return 0;
+        $commentaires = $this->commentaires->toArray();
+        if (empty($commentaires)) {
+            return 0;
+        }
+
+        $totalNotes = array_sum(array_map(fn ($c) => $c->getNote(), $commentaires));
+
+        return round($totalNotes / count($commentaires), 1);
     }
-    
-    $totalNotes = array_sum(array_map(fn($c) => $c->getNote(), $commentaires));
-    return round($totalNotes / count($commentaires), 1);
-}   
 }

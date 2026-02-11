@@ -2,11 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
 use App\Entity\Categorie;
 use App\Entity\Ingredient;
 use App\Entity\Recette;
 use App\Entity\RecetteIngredient;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -36,12 +36,12 @@ class AppFixtures extends Fixture
             'Entrées' => '#28a745',
             'Desserts' => '#ffc107',
         ];
-        
+
         $catObjects = [];
         foreach ($categories as $nom => $couleur) {
             $cat = new Categorie();
             $cat->setNom($nom);
-            $cat->setDescription('Catégorie ' . $nom);
+            $cat->setDescription('Catégorie '.$nom);
             $cat->setCouleur($couleur);
             $manager->persist($cat);
             $catObjects[$nom] = $cat;
@@ -54,9 +54,9 @@ class AppFixtures extends Fixture
             'Crème fraîche', 'Parmesan', 'Farine', 'Citron', 'Pâtes', 'Oignons',
             'Carottes', 'Huile d\'olive', 'Piment', 'Poulet', 'Bœuf', 'Poisson',
             'Pâte brisée', 'Haricots', 'Aubergines', 'Chocolat', 'Vanille',
-            'Veau', 'Canard', 'Poivre', 'Foie gras', 'Saumon', 'Jus de citron', 'Butternut'
+            'Veau', 'Canard', 'Poivre', 'Foie gras', 'Saumon', 'Jus de citron', 'Butternut',
         ];
-        
+
         foreach ($ingredientNames as $name) {
             $ing = new Ingredient();
             $ing->setNom($name);
@@ -67,7 +67,7 @@ class AppFixtures extends Fixture
         }
 
         $existingImages = ['pizza.jpg', 'lasagnes.jpg', 'tarte.jpg', 'salade.jpg', 'poulet.jpg'];
-        
+
         $recipes = [
             ['nom' => 'Tarte aux pommes', 'cat' => 'Desserts', 'ing' => ['Pommes', 'Sucre', 'Beurre', 'Farine']],
             ['nom' => 'Quiche lorraine', 'cat' => 'Plats principaux', 'ing' => ['Œufs', 'Jambon', 'Fromage']],
@@ -132,10 +132,10 @@ class AppFixtures extends Fixture
             $recette->setTempsCuisson(rand(10, 90));
             $recette->setNombrePersonnes(rand(2, 6));
             $recette->setDifficulte(rand(1, 3));
-            
+
             $recette->setImage($existingImages[$imageIndex % $totalImages]);
-            $imageIndex++;
-            
+            ++$imageIndex;
+
             $recette->setCategorie($catObjects[$data['cat']]);
             $recette->setUser($user);
             $manager->persist($recette);
@@ -153,9 +153,9 @@ class AppFixtures extends Fixture
                 $recetteIngredient = new RecetteIngredient();
                 $recetteIngredient->setRecette($recette);
                 $recetteIngredient->setIngredient($ingredients[$ingName]);
-                
+
                 // Quantités  selon l'ingrédient
-                $quantite = match($ingName) {
+                $quantite = match ($ingName) {
                     'Œufs' => rand(2, 6),
                     'Tomates', 'Pommes', 'Carottes', 'Oignons', 'Citron' => rand(2, 4),
                     'Ail' => rand(1, 3),
@@ -173,9 +173,9 @@ class AppFixtures extends Fixture
                     'Foie gras' => rand(200, 400),
                     'Butternut' => rand(400, 600),
                     'Pâte brisée', 'Parmesan' => rand(150, 250),
-                    default => rand(100, 300)
+                    default => rand(100, 300),
                 };
-                
+
                 $recetteIngredient->setQuantite($quantite);
                 $manager->persist($recetteIngredient);
             }

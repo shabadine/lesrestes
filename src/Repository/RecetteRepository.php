@@ -4,8 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Recette;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Recette>
@@ -19,6 +19,7 @@ class RecetteRepository extends ServiceEntityRepository
 
     /**
      * @param int[] $ingredientIds
+     *
      * @return Recette[]
      */
     public function findByIngredients(array $ingredientIds, bool $requireAll = false): array
@@ -48,8 +49,6 @@ class RecetteRepository extends ServiceEntityRepository
     /**
      * Retourne un tableau de recettes filtrées.
      *
-     * @param array $criteria
-     * @param array $orderBy
      * @return Recette[]
      */
     public function findWithFilters(array $criteria = [], array $orderBy = []): array
@@ -82,7 +81,7 @@ class RecetteRepository extends ServiceEntityRepository
             ->groupBy('r.id');
         if (!empty($criteria['query'])) {
             $qb->andWhere('r.nom LIKE :query OR i.nom LIKE :query')
-               ->setParameter('query', '%' . $criteria['query'] . '%');
+               ->setParameter('query', '%'.$criteria['query'].'%');
         }
 
         if (!empty($criteria['categorie'])) {
@@ -101,11 +100,11 @@ class RecetteRepository extends ServiceEntityRepository
         }
 
         foreach ($orderBy as $field => $direction) {
-            if ($field === 'moyenneNotes') {
+            if ('moyenneNotes' === $field) {
                 $qb->addSelect('AVG(c.note) AS HIDDEN avg_note')
                    ->addOrderBy('avg_note', $direction);
             } else {
-                $qb->addOrderBy('r.' . $field, $direction);
+                $qb->addOrderBy('r.'.$field, $direction);
             }
         }
 
@@ -115,8 +114,8 @@ class RecetteRepository extends ServiceEntityRepository
     /**
      * Recherche par nom ou par ingrédients.
      *
-     * @param string $searchTerm
-     * @param int[]  $ingredientIds
+     * @param int[] $ingredientIds
+     *
      * @return Recette[]
      */
     public function findByNameOrIngredients(string $searchTerm, array $ingredientIds = []): array
@@ -125,7 +124,7 @@ class RecetteRepository extends ServiceEntityRepository
             ->leftJoin('r.recetteIngredients', 'ri')
             ->leftJoin('ri.ingredient', 'i')
             ->where('r.nom LIKE :searchTerm')
-            ->setParameter('searchTerm', '%' . $searchTerm . '%');
+            ->setParameter('searchTerm', '%'.$searchTerm.'%');
 
         if (!empty($ingredientIds)) {
             $qb->orWhere('i.id IN (:ingredientIds)')
@@ -140,14 +139,13 @@ class RecetteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
-    //Méthode “mes recettes” section profil
-    public function createUserRecettesQueryBuilder($user): QueryBuilder
-  {
-    return $this->createQueryBuilder('r')
-        ->where('r.user = :user')
-        ->setParameter('user', $user)
-        ->orderBy('r.dateCreation', 'DESC');
-  }
 
+    // Méthode “mes recettes” section profil
+    public function createUserRecettesQueryBuilder($user): QueryBuilder
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('r.dateCreation', 'DESC');
+    }
 }

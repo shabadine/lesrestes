@@ -20,24 +20,24 @@ class IngredientType extends AbstractType
                 'label' => 'Nom de l\'ingredient',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Ex: Tomate, Oignon, Farine...'
+                    'placeholder' => 'Ex: Tomate, Oignon, Farine...',
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Le nom de l\'ingredient est obligatoire'
+                        'message' => 'Le nom de l\'ingredient est obligatoire',
                     ]),
                     new Length([
                         'min' => 2,
                         'max' => 100,
                         'minMessage' => 'Le nom doit contenir au moins {{ limit }} caracteres',
-                        'maxMessage' => 'Le nom ne peut pas depasser {{ limit }} caracteres'
-                    ])
-                ]
+                        'maxMessage' => 'Le nom ne peut pas depasser {{ limit }} caracteres',
+                    ]),
+                ],
             ])
             ->add('unite', ChoiceType::class, [
                 'label' => 'Unite par defaut',
                 'attr' => [
-                    'class' => 'form-select'
+                    'class' => 'form-select',
                 ],
                 'choices' => [
                     'Gramme (g)' => 'g',
@@ -53,7 +53,7 @@ class IngredientType extends AbstractType
                     'Gousse' => 'gousse',
                 ],
                 'placeholder' => 'Choisir une unite',
-                'required' => false
+                'required' => false,
             ])
         ;
     }

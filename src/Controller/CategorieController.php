@@ -25,10 +25,10 @@ final class CategorieController extends AbstractController
     #[Route('/new', name: 'app_categorie_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
         $categorie = new Categorie();
-        $form      = $this->createForm(CategorieType::class, $categorie);
+        $form = $this->createForm(CategorieType::class, $categorie);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -42,7 +42,7 @@ final class CategorieController extends AbstractController
 
         return $this->render('categorie/new.html.twig', [
             'categorie' => $categorie,
-            'form'      => $form,
+            'form' => $form,
         ]);
     }
 
@@ -58,7 +58,7 @@ final class CategorieController extends AbstractController
     public function edit(
         Request $request,
         Categorie $categorie,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
         $form = $this->createForm(CategorieType::class, $categorie);
         $form->handleRequest($request);
@@ -73,7 +73,7 @@ final class CategorieController extends AbstractController
 
         return $this->render('categorie/edit.html.twig', [
             'categorie' => $categorie,
-            'form'      => $form,
+            'form' => $form,
         ]);
     }
 
@@ -81,9 +81,9 @@ final class CategorieController extends AbstractController
     public function delete(
         Request $request,
         Categorie $categorie,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $categorie->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$categorie->getId(), $request->request->get('_token'))) {
             $entityManager->remove($categorie);
             $entityManager->flush();
 

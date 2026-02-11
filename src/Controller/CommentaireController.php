@@ -39,17 +39,18 @@ final class CommentaireController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_commentaire_delete', methods: ['POST'])]
-    public function delete(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response 
+    public function delete(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
     {
         if ($commentaire->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException('Suppression interdite.');
         }
 
-        if ($this->isCsrfTokenValid('delete' . $commentaire->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$commentaire->getId(), $request->request->get('_token'))) {
             $recetteId = $commentaire->getRecette()->getId();
             $entityManager->remove($commentaire);
             $entityManager->flush();
             $this->addFlash('success', 'Commentaire supprimé.');
+
             return $this->redirectToRoute('app_recette_show', ['id' => $recetteId]);
         }
 

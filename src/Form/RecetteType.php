@@ -37,7 +37,7 @@ class RecetteType extends AbstractType
                 'class' => Categorie::class,
                 'choice_label' => 'nom',
             ])
-            
+
             ->add('recetteIngredients', CollectionType::class, [
                 'entry_type' => RecetteIngredientType::class,
                 'entry_options' => ['label' => false],
@@ -45,7 +45,7 @@ class RecetteType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'prototype' => true,
-                'attr' => ['class' => 'ingredients-collection']
+                'attr' => ['class' => 'ingredients-collection'],
             ]);
     }
 

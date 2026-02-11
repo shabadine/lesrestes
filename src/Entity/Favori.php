@@ -56,8 +56,8 @@ class Favori
         return $this->dateAjout;
     }
 
-    public function __construct() 
-    { 
-        $this->dateAjout = new \DateTimeImmutable(); 
-    } 
+    public function __construct()
+    {
+        $this->dateAjout = new \DateTimeImmutable();
+    }
 }

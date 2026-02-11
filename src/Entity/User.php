@@ -71,18 +71,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'user', cascade: ['remove'])]
     private Collection $commentaires;
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
-    public function __construct() 
-    { 
-        $this->recettes = new ArrayCollection(); 
-        $this->dateInscription = new \DateTimeImmutable(); 
+    public function __construct()
+    {
+        $this->recettes = new ArrayCollection();
+        $this->dateInscription = new \DateTimeImmutable();
         $this->isVerified = false;
         $this->favoris = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
-    } 
+    }
 
     public function getId(): ?int
     {
@@ -141,6 +141,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoto(?string $photo): static
     {
         $this->photo = $photo;
+
         return $this;
     }
 

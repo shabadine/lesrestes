@@ -20,7 +20,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 final class RegistrationController extends AbstractController
 {
     public function __construct(
-        private EmailVerifier $emailVerifier
+        private EmailVerifier $emailVerifier,
     ) {
     }
 
@@ -29,7 +29,7 @@ final class RegistrationController extends AbstractController
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
         Security $security,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -67,7 +67,7 @@ final class RegistrationController extends AbstractController
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(
         Request $request,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 

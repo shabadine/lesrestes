@@ -34,3 +34,11 @@ remove-emojis.js
 ###> liip/imagine-bundle ###
 /public/media/cache/
 ###< liip/imagine-bundle ###
+###> Mes fichiers personnels ###
+/DEPLOIEMENT.md
+.env.local
+###< Mes fichiers personnels ###
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###

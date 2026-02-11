@@ -40,6 +40,7 @@ class RecetteIngredient
     public function setQuantite(string $quantite): static
     {
         $this->quantite = $quantite;
+
         return $this;
     }
 
@@ -51,6 +52,7 @@ class RecetteIngredient
     public function setUnite(?string $unite): static
     {
         $this->unite = $unite;
+
         return $this;
     }
 
@@ -62,6 +64,7 @@ class RecetteIngredient
     public function setRecette(?Recette $recette): static
     {
         $this->recette = $recette;
+
         return $this;
     }
 
@@ -73,6 +76,7 @@ class RecetteIngredient
     public function setIngredient(?Ingredient $ingredient): static
     {
         $this->ingredient = $ingredient;
+
         return $this;
     }
 }

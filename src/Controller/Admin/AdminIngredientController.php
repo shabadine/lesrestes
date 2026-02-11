@@ -21,23 +21,22 @@ class AdminIngredientController extends AbstractController
     public function index(
         Request $request,
         IngredientRepository $ingredientRepository,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
     ): Response {
         $search = $request->query->get('search', '');
 
         $queryBuilder = $ingredientRepository->createAdminSearchQueryBuilder($search);
 
         $pagination = $paginator->paginate(
-        $queryBuilder,
-        $request->query->getInt('page', 1),
-        20
-    );
+            $queryBuilder,
+            $request->query->getInt('page', 1),
+            20
+        );
 
-     return $this->render('admin/ingredient/index.html.twig', [
-    'ingredients' => $pagination,
-    'search'      => $search,
-    ]);
-
+        return $this->render('admin/ingredient/index.html.twig', [
+            'ingredients' => $pagination,
+            'search' => $search,
+        ]);
     }
 
     #[Route('/new', name: 'app_admin_ingredient_new', methods: ['GET', 'POST'])]
@@ -66,7 +65,7 @@ class AdminIngredientController extends AbstractController
     public function edit(
         Request $request,
         Ingredient $ingredient,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
         $form = $this->createForm(IngredientType::class, $ingredient);
         $form->handleRequest($request);
@@ -89,9 +88,9 @@ class AdminIngredientController extends AbstractController
     public function delete(
         Request $request,
         Ingredient $ingredient,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $ingredient->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$ingredient->getId(), $request->request->get('_token'))) {
             // Vérifier si l'ingrédient est utilisé dans des recettes
             if ($ingredient->getRecetteIngredients()->count() > 0) {
                 $this->addFlash('danger', 'Impossible de supprimer cet ingredient car il est utilise dans des recettes.');

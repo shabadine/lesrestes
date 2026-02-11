@@ -15,27 +15,27 @@ class IngredientController extends AbstractController
     public function search(Request $request, IngredientRepository $ingredientRepository): JsonResponse
     {
         $query = $request->query->get('q', '');
-        
+
         if (strlen($query) < 2) {
             return new JsonResponse([]);
         }
-        
+
         $ingredients = $ingredientRepository->createQueryBuilder('i')
             ->where('i.nom LIKE :query')
-            ->setParameter('query', '%' . $query . '%')
+            ->setParameter('query', '%'.$query.'%')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
-        
+
         $data = [];
         foreach ($ingredients as $ingredient) {
             $data[] = [
                 'id' => $ingredient->getId(),
                 'nom' => $ingredient->getNom(),
-                'unite' => $ingredient->getUnite()
+                'unite' => $ingredient->getUnite(),
             ];
         }
-        
+
         return new JsonResponse($data);
     }
 }

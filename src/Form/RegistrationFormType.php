@@ -17,35 +17,35 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
-{
-    $builder
-        ->add('nom', TextType::class, [
-            'label' => 'Nom',
-            'constraints' => [
-                new NotBlank(['message' => 'Le nom est obligatoire']),
-                new Length(['max' => 50])
-            ]
-        ])
-        ->add('prenom', TextType::class, [
-            'label' => 'Prénom', 
-            'constraints' => [
-                new NotBlank(['message' => 'Le prénom est obligatoire']),
-                new Length(['max' => 50])
-            ]
-        ])
-        ->add('email', EmailType::class)
-        ->add('agreeTerms', CheckboxType::class, [
-            'mapped' => false,
-            'constraints' => [new IsTrue()]
-        ])
-        ->add('plainPassword', PasswordType::class, [
-            'mapped' => false,
-            'constraints' => [
-                new NotBlank(),
-                new Length(['min' => 6, 'max' => 4096])
-            ]
-        ]);
-}
+    {
+        $builder
+            ->add('nom', TextType::class, [
+                'label' => 'Nom',
+                'constraints' => [
+                    new NotBlank(['message' => 'Le nom est obligatoire']),
+                    new Length(['max' => 50]),
+                ],
+            ])
+            ->add('prenom', TextType::class, [
+                'label' => 'Prénom',
+                'constraints' => [
+                    new NotBlank(['message' => 'Le prénom est obligatoire']),
+                    new Length(['max' => 50]),
+                ],
+            ])
+            ->add('email', EmailType::class)
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'constraints' => [new IsTrue()],
+            ])
+            ->add('plainPassword', PasswordType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(['min' => 6, 'max' => 4096]),
+                ],
+            ]);
+    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {

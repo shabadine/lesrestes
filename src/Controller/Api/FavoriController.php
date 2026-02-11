@@ -20,14 +20,14 @@ class FavoriController extends AbstractController
         int $id,
         RecetteRepository $recetteRepository,
         FavoriRepository $favoriRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
     ): JsonResponse {
         $recette = $recetteRepository->find($id);
         if (!$recette) {
             return new JsonResponse(['error' => 'Recette non trouvée'], 404);
         }
 
-        $user   = $this->getUser();
+        $user = $this->getUser();
         $favori = $favoriRepository->findOneBy(['user' => $user, 'recette' => $recette]);
 
         if ($favori) {
@@ -42,9 +42,9 @@ class FavoriController extends AbstractController
         $em->flush();
 
         return new JsonResponse([
-            'success'    => true,
+            'success' => true,
             'isFavorite' => $isFavorite,
-            'message'    => $isFavorite ? 'Ajouté aux favoris' : 'Retiré des favoris',
+            'message' => $isFavorite ? 'Ajouté aux favoris' : 'Retiré des favoris',
         ]);
     }
 }

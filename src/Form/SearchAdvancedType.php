@@ -18,24 +18,24 @@ class SearchAdvancedType extends AbstractType
             ->add('query', SearchType::class, [
                 'required' => false,
                 'label' => 'Recherche',
-                'attr' => ['placeholder' => 'Titre, ingrédient...']
+                'attr' => ['placeholder' => 'Titre, ingrédient...'],
             ])
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
                 'choice_label' => 'nom',
                 'required' => false,
                 'placeholder' => 'Toutes catégories',
-                'label' => 'Catégorie'
+                'label' => 'Catégorie',
             ])
             ->add('difficulte', ChoiceType::class, [
                 'choices' => [
                     'Facile' => 1,
                     'Moyen' => 2,
-                    'Difficile' => 3
+                    'Difficile' => 3,
                 ],
                 'required' => false,
                 'placeholder' => 'Toutes difficultés',
-                'label' => 'Difficulté'
+                'label' => 'Difficulté',
             ])
             ->add('tempsMax', ChoiceType::class, [
                 'choices' => [
@@ -44,20 +44,20 @@ class SearchAdvancedType extends AbstractType
                     '45 min' => 45,
                     '60 min' => 60,
                     '90 min' => 90,
-                    '120 min' => 120
+                    '120 min' => 120,
                 ],
                 'required' => false,
                 'placeholder' => 'Temps max',
-                'label' => 'Temps max'
+                'label' => 'Temps max',
             ])
             ->add('tri', ChoiceType::class, [
                 'choices' => [
                     'Plus récentes' => 'date_desc',
                     'Plus anciennes' => 'date_asc',
                     'Meilleures notes' => 'note_desc',
-                    'Plus vues' => 'vue_desc'
+                    'Plus vues' => 'vue_desc',
                 ],
-                'label' => 'Trier par'
+                'label' => 'Trier par',
             ])
         ;
     }
@@ -66,7 +66,7 @@ class SearchAdvancedType extends AbstractType
     {
         $resolver->setDefaults([
             'method' => 'GET',
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ]);
     }
 }
