@@ -1,4 +1,5 @@
-/* ========== NAVIGATION TABS (pour profil) ========== */
+/* Profile CSS */
+
 .nav-tabs .nav-link.active {
     background-color: #198754 !important;
     color: #ffffff !important;
@@ -15,13 +16,20 @@
     background-color: #f8f9fa;
 }
 
-.profile-card-wrapper .card {
-    transition: transform 0.2s;
-}
 .profile-info-card {
     transition: transform 0.2s;
 }
-/* ========== CARTES RECETTES  ========== */
+
+#profilTabContent .card-text {
+    flex-grow: 0 !important;
+    margin-bottom: 0.3rem !important;
+}
+
+#profilTabContent .card .row.small {
+    padding-top: 0.2rem !important;
+    margin-bottom: 0.1rem !important;
+}
+
 .card {
     background-color: var(--alt-background-color);
     border: 1px solid rgba(76, 175, 80, 0.1);

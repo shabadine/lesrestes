@@ -104,7 +104,7 @@
             {% if mesRecettes.getTotalItemCount > 0 %}
                 <div class="row">
                     {% for recette in mesRecettes %}
-                        <div class="col-12 col-sm-6 col-lg-4 mb-4">
+                        <div class="col-12 col-sm-6 col-lg-4 mb-5">
                             {{ include('recette/partials/_recipe_card.html.twig', {
                                 'recette': recette,
                                 'show_author': false
@@ -142,7 +142,7 @@
             {% if mesFavoris.getTotalItemCount > 0 %}
                 <div class="row">
                     {% for favori in mesFavoris %}
-                        <div class="col-12 col-sm-6 col-lg-4 mb-4">
+                        <div class="col-12 col-sm-6 col-lg-4 mb-5">
                             {{ include('recette/partials/_recipe_card.html.twig', {
                                 'recette': favori.recette
                             }) }}

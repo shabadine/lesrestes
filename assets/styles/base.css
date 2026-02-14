@@ -4,13 +4,13 @@ LES RESTES - Variables et styles de base
 
 /* Variables globales */
 :root {
-    --success-color: #4CAF50;
-    --navigation-title-color: #2E7D32;
-    --cta-color: #F08A00;
-    --text-color: #000000;
-    --background-color: #FCF8F5;
+    --success-color: #4CAF50;          /* Vert validation */
+    --navigation-title-color: #2E7D32; /* Vert identité */
+    --cta-color: #F08A00;              /* Orange action */
+    --text-color: #000000;             /* Texte principal */
+    --background-color: #FCF8F5;       /* Fond doux */
     --alt-background-color: #FFFFFF;
-    --error-color: #FF383C;
+    --error-color: #FF383C;            
 }
 
 /* Reset et base */
