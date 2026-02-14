@@ -27,8 +27,7 @@
 
     <div class="row">
         {% for recette in dernieresRecettes %}
-            <div class="col-md-4 mb-4">
-                
+            <div class="col-12 col-sm-6 col-lg-4 mb-4">
                 {{ include('recette/partials/_recipe_card.html.twig', {'recette': recette}) }}
             </div>
         {% else %}

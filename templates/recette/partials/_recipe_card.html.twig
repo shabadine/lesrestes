@@ -47,7 +47,7 @@
         </div>
         
         <p class="card-text text-dark small flex-grow-1">
-            {{ recette.description|length > 85 ? recette.description|slice(0, 85) ~ '...' : recette.description }}
+            {{ recette.description|length > 65 ? recette.description|slice(0, 65) ~ '...' : recette.description }}
         </p>
         
         <div class="row text-center small text-dark mb-3">

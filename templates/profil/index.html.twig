@@ -19,7 +19,7 @@
     
     <div class="row mb-5 profile-card-wrapper">
         <div class="col-lg-5 mb-4 mb-lg-0">
-            <section class="card border-success h-100 shadow-sm" aria-labelledby="profile-info-title">
+           <section class="card profile-info-card border-success h-100 shadow-sm" aria-labelledby="profile-info-title">
                 <div class="card-body text-center p-4 d-flex flex-column justify-content-center">
                     <h2 id="profile-info-title" class="visually-hidden">Informations personnelles</h2>
                     {% if user.photo %}
@@ -48,7 +48,7 @@
         </div>
         
         <div class="col-lg-7">
-            <section class="card border-success h-100 shadow-sm" aria-labelledby="stats-title">
+           <section class="card profile-info-card border-success h-100 shadow-sm" aria-labelledby="stats-title">
                 <div class="card-body p-4 d-flex flex-column justify-content-center">
                     <h2 id="stats-title" class="h5 text-success mb-4 text-center">Mes Statistiques</h2>
                     <div class="row align-items-center">
@@ -104,7 +104,7 @@
             {% if mesRecettes.getTotalItemCount > 0 %}
                 <div class="row">
                     {% for recette in mesRecettes %}
-                        <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="col-12 col-sm-6 col-lg-4 mb-4">
                             {{ include('recette/partials/_recipe_card.html.twig', {
                                 'recette': recette,
                                 'show_author': false
@@ -142,7 +142,7 @@
             {% if mesFavoris.getTotalItemCount > 0 %}
                 <div class="row">
                     {% for favori in mesFavoris %}
-                        <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="col-12 col-sm-6 col-lg-4 mb-4">
                             {{ include('recette/partials/_recipe_card.html.twig', {
                                 'recette': favori.recette
                             }) }}

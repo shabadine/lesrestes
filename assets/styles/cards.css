@@ -1,4 +1,4 @@
-/* LES RESTES - Cartes recettes optimisées */
+/* LES RESTES - Cartes recettes */
 
 .card {
     background-color: var(--alt-background-color);
@@ -16,50 +16,63 @@
 
 .card-body {
     background-color: var(--alt-background-color);
-    padding: 1.25rem;
+    padding: 0.75rem; 
 }
 
 .card-title {
     color: var(--navigation-title-color);
     font-weight: 600;
-    margin-bottom: 0.5rem;
-    height: 2.8rem; 
+    margin-bottom: 0.4rem;
+    height: 2rem; 
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    line-height: 1.4;
+    line-height: 1;
+    font-size: 0.95rem; 
 }
 
-/*description */
+/* Description  */
 .card-text {
-    height: 3.5rem; 
+    height: 2.4rem; 
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
+    margin-bottom: 0.5rem; 
+    font-size: 0.8rem; 
+    line-height: 1.2;
 }
 
-/* Images */
+/* Images  */
 .card-img-top {
-    height: 200px !important; 
+    height: 140px !important; 
     object-fit: cover;
 }
 
-/* Section icônes techniques plus compacte */
+/* Section icônes  */
 .card .row.small {
-    padding-top: 0.5rem;
+    padding-top: 0.4rem;
     border-top: 1px dashed rgba(0,0,0,0.05);
-    margin-bottom: 1rem !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 0.8rem; 
 }
 
-/* Étoiles de notation */
+/* Étoiles */
 .bi-star-fill.text-warning,
 .bi-star.text-warning {
     color: var(--cta-color) !important;
-    font-size: 0.85rem;
+    font-size: 0.75rem; 
+}
+
+/* carte Marges */
+.card-body .badge {
+    margin-bottom: 0.4rem;
+    font-size: 0.75rem;
+}
+
+.card-body .mb-2 {
+    margin-bottom: 0.4rem !important;
 }
 
 /* Responsive cards */
@@ -68,7 +81,7 @@
         transform: none;
     }
     .card-img-top {
-        height: 180px !important;
+        height: 130px !important;
     }
 }
 
